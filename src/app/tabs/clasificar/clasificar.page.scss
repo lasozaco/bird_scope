@@ -1,0 +1,150 @@
+:host {
+  --page-bg: #f6f4ef;
+  --card-bg: #ffffff;
+  --card-border: rgba(15, 23, 42, 0.10);
+  --shadow: 0 12px 30px rgba(2, 6, 23, 0.10);
+  --green: #1f6f49;
+  --text: #111827;
+  --muted: #6b7280;
+  --serif: ui-serif, Georgia, 'Times New Roman', Times, serif;
+}
+
+.page-header {
+  ion-toolbar {
+    --background: #ffffff;
+    --border-color: rgba(15, 23, 42, 0.08);
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 10px;
+}
+
+.brand__logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--green);
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+}
+
+.brand__logo ion-icon {
+  font-size: 22px;
+}
+
+.brand__title {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1.05;
+  color: #0f172a;
+}
+
+.brand__subtitle {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.1;
+}
+
+.page-content {
+  --background: var(--page-bg);
+  --overflow: auto;
+}
+
+.page {
+  padding: 16px 16px calc(24px + env(safe-area-inset-bottom) + 72px);
+}
+
+.capture-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
+  overflow: hidden;
+}
+
+.capture-card__inner {
+  background: #e7e8df;
+  padding: 28px 18px 26px;
+  text-align: center;
+}
+
+.capture-card__primary {
+  --background: var(--green);
+  --color: #ffffff;
+  --border-radius: 14px;
+  --padding-start: 18px;
+  --padding-end: 18px;
+  height: 48px;
+  font-family: var(--serif);
+  text-transform: none;
+  font-weight: 900;
+  min-width: 210px;
+}
+
+.capture-card__secondary {
+  margin-top: 14px;
+  --background: #f7f7f3;
+  --color: #111827;
+  --border-radius: 14px;
+  --padding-start: 18px;
+  --padding-end: 18px;
+  --border-color: rgba(15, 23, 42, 0.16);
+  --border-style: solid;
+  --border-width: 1px;
+  height: 46px;
+  font-family: var(--serif);
+  text-transform: none;
+  font-weight: 900;
+  min-width: 210px;
+}
+
+.capture-card__hint {
+  margin: 20px 0 0;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.55;
+  color: rgba(17, 24, 39, 0.55);
+}
+
+.tips-card {
+  margin-top: 18px;
+  background: #eef0e8;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-radius: 18px;
+  padding: 22px 20px 24px;
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
+}
+
+.tips-card__title {
+  margin: 0 0 12px;
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 22px;
+  color: #111827;
+}
+
+.tips-card__list {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(17, 24, 39, 0.70);
+}
+
+.tips-card__list li {
+  margin-top: 10px;
+}
+
+.tips-card__list li::before {
+  content: '- ';
+}
+

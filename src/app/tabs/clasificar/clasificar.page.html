@@ -1,0 +1,52 @@
+<ion-header class="page-header" [translucent]="true">
+  <ion-toolbar>
+    <div class="brand" slot="start">
+      <div class="brand__logo" aria-hidden="true">
+        <ion-icon name="leaf-outline"></ion-icon>
+      </div>
+      <div class="brand__text">
+        <div class="brand__title">Clasificar Ave</div>
+        <div class="brand__subtitle">Clasificador de Aves</div>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-content">
+  <div class="page">
+    <section class="capture-card" aria-label="Capturar o cargar imagen">
+      <div class="capture-card__inner">
+        <ion-button class="capture-card__primary" fill="solid">
+          <ion-icon slot="start" name="camera-outline"></ion-icon>
+          Usar Cámara
+        </ion-button>
+
+        <ion-button class="capture-card__secondary" fill="solid">
+          <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+          Cargar Imagen
+        </ion-button>
+
+        <p class="capture-card__hint">
+          Toma una foto o carga una imagen de un ave
+          <br />
+          para identificarla
+        </p>
+      </div>
+    </section>
+
+    <section class="tips-card" aria-label="Consejos">
+      <h2 class="tips-card__title">Consejos para una mejor identificación</h2>
+      <ul class="tips-card__list">
+        <li>Toma la foto con buena iluminación</li>
+        <li>Intenta capturar el ave de perfil</li>
+        <li>Acércate lo más posible sin asustar al ave</li>
+        <li>
+          Incluye características distintivas como plumaje
+          <br />
+          y pico
+        </li>
+      </ul>
+    </section>
+  </div>
+</ion-content>
+

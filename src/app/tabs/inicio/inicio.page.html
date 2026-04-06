@@ -1,0 +1,124 @@
+<ion-header class="home-header" [translucent]="true">
+  <ion-toolbar>
+    <div class="brand" slot="start">
+      <div class="brand__logo" aria-hidden="true">
+        <ion-icon name="leaf-outline"></ion-icon>
+      </div>
+      <div class="brand__text">
+        <div class="brand__title">AvesTolima</div>
+        <div class="brand__subtitle">Clasificador de Aves</div>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="home-content">
+  <div class="home">
+    <section class="welcome-card" aria-label="Bienvenida">
+      <div class="welcome-card__bg" aria-hidden="true"></div>
+      <h1 class="welcome-card__title">Bienvenido a AvesTolima</h1>
+      <p class="welcome-card__subtitle">
+        Descubre y registra las aves del departamento
+        <br />
+        del Tolima, Colombia
+      </p>
+
+      <ion-button class="welcome-card__cta" fill="solid">
+        <ion-icon slot="start" name="camera-outline"></ion-icon>
+        Identificar Ave
+      </ion-button>
+    </section>
+
+    <section class="stats" aria-label="Estadísticas">
+      <div class="stat-card">
+        <div class="stat-card__value">0</div>
+        <div class="stat-card__label">Observaciones</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__value stat-card__value--gold">0</div>
+        <div class="stat-card__label">Especies Vistas</div>
+      </div>
+    </section>
+
+    <h2 class="section-title">Acciones Rápidas</h2>
+
+    <section class="quick-actions" aria-label="Acciones rápidas">
+      <a class="action-card" [routerLink]="['/tabs/clasificar']">
+        <div class="action-card__icon action-card__icon--green" aria-hidden="true">
+          <ion-icon name="camera-outline"></ion-icon>
+        </div>
+        <div class="action-card__title">Clasificar Ave</div>
+        <div class="action-card__subtitle">Identifica una especie</div>
+      </a>
+
+      <a class="action-card" [routerLink]="['/tabs/especies']">
+        <div class="action-card__icon action-card__icon--gold" aria-hidden="true">
+          <ion-icon name="leaf-outline"></ion-icon>
+        </div>
+        <div class="action-card__title">Ver Especies</div>
+        <div class="action-card__subtitle">18 especies registradas</div>
+      </a>
+    </section>
+
+    <section class="tools" aria-label="Herramientas">
+      <a class="tool-card" [routerLink]="['/tabs/mapa']">
+        <div class="tool-card__icon tool-card__icon--teal" aria-hidden="true">
+          <ion-icon name="location-outline"></ion-icon>
+        </div>
+        <div class="tool-card__title">
+          Mapa de
+          <br />
+          Avistamientos
+        </div>
+        <div class="tool-card__subtitle">Explora ubicaciones</div>
+      </a>
+
+      <a class="tool-card" [routerLink]="['/tabs/reportes']">
+        <div class="tool-card__icon tool-card__icon--orange" aria-hidden="true">
+          <ion-icon name="bar-chart-outline"></ion-icon>
+        </div>
+        <div class="tool-card__title">Estadísticas</div>
+        <div class="tool-card__subtitle">Analiza tus datos</div>
+      </a>
+    </section>
+
+    <div class="section-row">
+      <h2 class="section-title section-title--tight">Especies Destacadas</h2>
+      <a class="section-link" [routerLink]="['/tabs/especies']">Ver todas</a>
+    </div>
+
+    <section class="featured" aria-label="Especies destacadas">
+      <a class="species-card" [routerLink]="['/tabs/especies']">
+        <div class="species-card__media" aria-hidden="true">
+          <ion-icon name="leaf-outline"></ion-icon>
+        </div>
+        <div class="species-card__name">Loro Coroniamarillo</div>
+        <div class="species-card__latin">Amazona ochrocephala</div>
+      </a>
+
+      <a class="species-card" [routerLink]="['/tabs/especies']">
+        <div class="species-card__media" aria-hidden="true">
+          <ion-icon name="leaf-outline"></ion-icon>
+        </div>
+        <div class="species-card__name">Barranquero Coro…</div>
+        <div class="species-card__latin">Momotus momota</div>
+      </a>
+
+      <a class="species-card" [routerLink]="['/tabs/especies']" aria-label="Ver más especies">
+        <div class="species-card__media" aria-hidden="true">
+          <ion-icon name="leaf-outline"></ion-icon>
+        </div>
+        <div class="species-card__name">...</div>
+        <div class="species-card__latin">&nbsp;</div>
+      </a>
+    </section>
+
+    <section class="about" aria-label="Acerca de AvesTolima">
+      <h2 class="about__title">Acerca de AvesTolima</h2>
+      <p class="about__text">
+        Esta aplicación utiliza inteligencia artificial para ayudarte a identificar las 18 especies de aves más comunes del departamento del Tolima. Registra tus avistamientos y contribuye a la conservación de nuestra biodiversidad.
+      </p>
+    </section>
+  </div>
+</ion-content>
+
