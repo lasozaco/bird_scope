@@ -1,0 +1,7 @@
+{
+  "name": "bird_scope",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
