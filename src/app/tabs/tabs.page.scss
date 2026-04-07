@@ -15,3 +15,11 @@ ion-tab-button {
   --color-selected: var(--tabs-active);
 }
 
+ion-tab-button.tab-selected ion-icon {
+  filter: drop-shadow(0 0 10px rgba(31, 111, 73, 0.35));
+}
+
+ion-tab-button[tab='especies'].tab-selected ion-icon {
+  filter: drop-shadow(0 0 14px rgba(31, 111, 73, 0.55));
+}
+

@@ -1,10 +1,70 @@
-<ion-header [translucent]="true">
+<ion-header class="page-header" [translucent]="true">
   <ion-toolbar>
-    <ion-title>Reportes</ion-title>
+    <div class="brand" slot="start">
+      <div class="brand__logo" aria-hidden="true">
+        <ion-icon name="leaf-outline"></ion-icon>
+      </div>
+      <div class="brand__text">
+        <div class="brand__title">Reportes y Estadísticas</div>
+        <div class="brand__subtitle">Clasificador de Aves</div>
+      </div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div style="padding: 16px;">Reportes</div>
+<ion-content [fullscreen]="true" class="page-content">
+  <div class="page">
+    <section class="metrics" aria-label="Métricas">
+      <div class="metric-card">
+        <div class="metric-card__icon metric-card__icon--green" aria-hidden="true">
+          <ion-icon name="leaf-outline"></ion-icon>
+        </div>
+        <div class="metric-card__value">0</div>
+        <div class="metric-card__label">Observaciones</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-card__icon metric-card__icon--gold" aria-hidden="true">
+          <ion-icon name="ribbon-outline"></ion-icon>
+        </div>
+        <div class="metric-card__value">0</div>
+        <div class="metric-card__label">Especies Únicas</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-card__icon metric-card__icon--teal" aria-hidden="true">
+          <ion-icon name="locate-outline"></ion-icon>
+        </div>
+        <div class="metric-card__value">0%</div>
+        <div class="metric-card__label">Confianza Prom.</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-card__icon metric-card__icon--orange" aria-hidden="true">
+          <ion-icon name="location-outline"></ion-icon>
+        </div>
+        <div class="metric-card__value">0</div>
+        <div class="metric-card__label">Con Ubicación</div>
+      </div>
+    </section>
+
+    <section class="progress-card" aria-label="Progreso de colección">
+      <div class="progress-card__title">
+        <ion-icon name="trending-up-outline" aria-hidden="true"></ion-icon>
+        Progreso de Colección
+      </div>
+
+      <div class="progress-card__row">
+        <div class="progress-card__left">0 de 18 especies</div>
+        <div class="progress-card__right">0%</div>
+      </div>
+
+      <div class="progress-bar" aria-hidden="true">
+        <div class="progress-bar__fill" style="width: 0%;"></div>
+      </div>
+
+      <div class="progress-card__hint">Te faltan 18 especies por registrar</div>
+    </section>
+  </div>
 </ion-content>
 

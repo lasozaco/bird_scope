@@ -1,10 +1,82 @@
-<ion-header [translucent]="true">
+<ion-header class="page-header" [translucent]="true">
   <ion-toolbar>
-    <ion-title>Mapa</ion-title>
+    <div class="brand" slot="start">
+      <div class="brand__logo" aria-hidden="true">
+        <ion-icon name="leaf-outline"></ion-icon>
+      </div>
+      <div class="brand__text">
+        <div class="brand__title">Mapa de Avistamientos</div>
+        <div class="brand__subtitle">Clasificador de Aves</div>
+      </div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div style="padding: 16px;">Mapa</div>
+<ion-content [fullscreen]="true" class="page-content">
+  <div class="page">
+    <section class="stats" aria-label="Estadísticas">
+      <div class="stat-card">
+        <div class="stat-card__value">0</div>
+        <div class="stat-card__label">Total Observaciones</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card__value stat-card__value--gold">0</div>
+        <div class="stat-card__label">Con Ubicación GPS</div>
+      </div>
+    </section>
+
+    <div class="mode-toggle" role="tablist" aria-label="Modo de vista">
+      <button
+        type="button"
+        class="mode-toggle__btn"
+        [class.is-active]="viewMode() === 'mapa'"
+        (click)="viewMode.set('mapa')"
+      >
+        <ion-icon name="map-outline" aria-hidden="true"></ion-icon>
+        Mapa
+      </button>
+      <button
+        type="button"
+        class="mode-toggle__btn"
+        [class.is-active]="viewMode() === 'lista'"
+        (click)="viewMode.set('lista')"
+      >
+        <ion-icon name="list-outline" aria-hidden="true"></ion-icon>
+        Lista
+      </button>
+    </div>
+
+    @if (viewMode() === 'mapa') {
+      <section class="map-shell" aria-label="Mapa">
+        <div class="leaflet-zoom" aria-hidden="true">
+          <button type="button" class="leaflet-zoom__btn">+</button>
+          <button type="button" class="leaflet-zoom__btn">−</button>
+        </div>
+
+        <div class="map-shell__attribution" aria-hidden="true">
+          Leaflet | © OpenStreetMap contributors
+        </div>
+      </section>
+    } @else {
+      <section class="empty-card" aria-label="Lista de observaciones vacía">
+        <div class="empty-card__inner">
+          <div class="empty-card__icon" aria-hidden="true">
+            <ion-icon name="leaf-outline"></ion-icon>
+          </div>
+          <div class="empty-card__title">Sin observaciones registradas</div>
+          <div class="empty-card__subtitle">
+            Comienza a clasificar aves para ver tu historial
+          </div>
+          <ion-button
+            class="empty-card__cta"
+            [routerLink]="['/tabs/clasificar']"
+            fill="solid"
+          >
+            Clasificar Ave
+          </ion-button>
+        </div>
+      </section>
+    }
+  </div>
 </ion-content>
 

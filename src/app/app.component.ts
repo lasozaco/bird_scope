@@ -5,10 +5,18 @@ import { addIcons } from 'ionicons';
 import {
   barChartOutline,
   cameraOutline,
+  chevronDownOutline,
+  chevronForwardOutline,
   cloudUploadOutline,
   homeOutline,
   leafOutline,
+  listOutline,
+  mapOutline,
   locationOutline,
+  searchOutline,
+  ribbonOutline,
+  locateOutline,
+  trendingUpOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -22,10 +30,18 @@ export class AppComponent {
     addIcons({
       barChartOutline,
       cameraOutline,
+      chevronDownOutline,
+      chevronForwardOutline,
       cloudUploadOutline,
       homeOutline,
       leafOutline,
+      listOutline,
+      mapOutline,
       locationOutline,
+      searchOutline,
+      ribbonOutline,
+      locateOutline,
+      trendingUpOutline,
     });
   }
 }

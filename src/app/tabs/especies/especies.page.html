@@ -1,10 +1,79 @@
-<ion-header [translucent]="true">
+<ion-header class="page-header" [translucent]="true">
   <ion-toolbar>
-    <ion-title>Especies</ion-title>
+    <div class="brand" slot="start">
+      <div class="brand__logo" aria-hidden="true">
+        <ion-icon name="leaf-outline"></ion-icon>
+      </div>
+      <div class="brand__text">
+        <div class="brand__title">Especies</div>
+        <div class="brand__subtitle">Clasificador de Aves</div>
+      </div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div style="padding: 16px;">Especies</div>
-</ion-content>
+<ion-content [fullscreen]="true" class="page-content">
+  <div class="page">
+    <ion-searchbar
+      class="species-search"
+      [value]="search()"
+      (ionInput)="onSearchInput($event)"
+      placeholder="Buscar por nombre o característica..."
+      [showClearButton]="'focus'"
+      [debounce]="0"
+    ></ion-searchbar>
 
+    <div class="filters">
+      <ion-select
+        class="filter-select"
+        [value]="familyFilter()"
+        (ionChange)="onFamilyChange($event)"
+        interface="popover"
+      >
+        <ion-select-option value="all">Todas las familias</ion-select-option>
+        @for (f of families(); track f) {
+          <ion-select-option [value]="f">{{ f }}</ion-select-option>
+        }
+      </ion-select>
+
+      <ion-select
+        class="filter-select"
+        [value]="sortBy()"
+        (ionChange)="onSortChange($event)"
+        interface="popover"
+      >
+        <ion-select-option value="name">Nombre</ion-select-option>
+        <ion-select-option value="scientific">Nombre científico</ion-select-option>
+      </ion-select>
+    </div>
+
+    <p class="results-count">{{ resultCount() }} especies encontradas</p>
+
+    <ul class="species-list" role="list">
+      @for (s of filteredSpecies(); track s.commonName + s.scientificName) {
+        <li>
+          <button type="button" class="species-card">
+            <div class="species-card__icon" aria-hidden="true">
+              <ion-icon name="leaf-outline"></ion-icon>
+            </div>
+            <div class="species-card__body">
+              <div class="species-card__name">{{ s.commonName }}</div>
+              <div class="species-card__latin">
+                <em>{{ s.scientificName }}</em>
+              </div>
+              <div class="species-card__meta">
+                <span class="species-card__family">{{ s.family }}</span>
+                <span class="species-card__badge">{{ s.status }}</span>
+              </div>
+            </div>
+            <ion-icon
+              class="species-card__chevron"
+              name="chevron-forward-outline"
+              aria-hidden="true"
+            ></ion-icon>
+          </button>
+        </li>
+      }
+    </ul>
+  </div>
+</ion-content>
