@@ -30,14 +30,16 @@
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: var(--green);
+  background: transparent;
   display: grid;
   place-items: center;
-  color: #ffffff;
 }
 
-.brand__logo ion-icon {
-  font-size: 22px;
+.brand__img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
 }
 
 .brand__title {
@@ -46,6 +48,14 @@
   font-size: 18px;
   line-height: 1.05;
   color: #0f172a;
+}
+
+.brand__wordmark {
+  display: block;
+  height: 22px;
+  width: auto;
+  max-width: 190px;
+  object-fit: contain;
 }
 
 .brand__subtitle {
