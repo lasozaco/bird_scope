@@ -185,3 +185,89 @@
   color: rgba(17, 24, 39, 0.60);
 }
 
+.empty-state {
+  margin-top: 18px;
+  background: var(--card-bg);
+  border-radius: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
+  overflow: hidden;
+}
+
+.empty-state__inner {
+  background: #eef0e8;
+  padding: 36px 18px 34px;
+  text-align: center;
+}
+
+.empty-state__icon {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 18px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: rgba(17, 24, 39, 0.65);
+}
+
+.empty-state__icon ion-icon {
+  font-size: 56px;
+}
+
+.empty-state__title {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 22px;
+  color: #111827;
+}
+
+.empty-state__subtitle {
+  margin-top: 10px;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.55;
+  color: rgba(17, 24, 39, 0.65);
+}
+
+.empty-state__cta {
+  margin-top: 18px;
+  --background: var(--green);
+  --color: #ffffff;
+  --border-radius: 14px;
+  --padding-start: 18px;
+  --padding-end: 18px;
+  height: 44px;
+  font-family: var(--serif);
+  text-transform: none;
+  font-weight: 900;
+}
+
+.about-card {
+  margin-top: 18px;
+  background: #eef0e8;
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-radius: 18px;
+  padding: 22px 20px 24px;
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
+}
+
+.about-card__title {
+  margin: 0 0 12px;
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 22px;
+  color: #111827;
+}
+
+.about-card__text {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(17, 24, 39, 0.70);
+}
+
+.about-card__text + .about-card__text {
+  margin-top: 14px;
+}
+

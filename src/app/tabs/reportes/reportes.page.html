@@ -65,6 +65,38 @@
 
       <div class="progress-card__hint">Te faltan 18 especies por registrar</div>
     </section>
+
+    <section class="empty-state" aria-label="Estado vacío de reportes">
+      <div class="empty-state__inner">
+        <div class="empty-state__icon" aria-hidden="true">
+          <ion-icon name="leaf-outline"></ion-icon>
+        </div>
+        <div class="empty-state__title">Sin datos para mostrar</div>
+        <div class="empty-state__subtitle">
+          Comienza a registrar observaciones para ver
+          <br />
+          tus estadísticas
+        </div>
+        <ion-button
+          class="empty-state__cta"
+          [routerLink]="['/tabs/clasificar']"
+          fill="solid"
+        >
+          Clasificar Ave
+        </ion-button>
+      </div>
+    </section>
+
+    <section class="about-card" aria-label="Sobre los Reportes">
+      <h2 class="about-card__title">Sobre los Reportes</h2>
+      <p class="about-card__text">
+        Esta sección muestra un resumen de todas tus observaciones de aves en el
+        Tolima. Los datos se almacenan localmente en tu dispositivo.
+      </p>
+      <p class="about-card__text">
+        Puedes exportarlos en formato JSON para compartirlos o hacer respaldos.
+      </p>
+    </section>
   </div>
 </ion-content>
 
