@@ -47,6 +47,14 @@
   color: #0f172a;
 }
 
+.brand__wordmark {
+  display: block;
+  height: 22px;
+  width: auto;
+  max-width: 190px;
+  object-fit: contain;
+}
+
 .brand__subtitle {
   font-family: var(--serif);
   font-size: 14px;

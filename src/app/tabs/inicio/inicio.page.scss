@@ -77,7 +77,7 @@
 .welcome-card {
   position: relative;
   overflow: hidden;
-  background: var(--green);
+  background: #0d3d2a;
   border-radius: 18px;
   padding: 26px 22px 22px;
   box-shadow: var(--shadow);
@@ -86,16 +86,29 @@
 
 .welcome-card__bg {
   position: absolute;
-  inset: -40px -60px auto auto;
-  width: 220px;
-  height: 220px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.10);
-  filter: blur(0.2px);
+  inset: -28px;
+  z-index: 0;
+  background-image: url('/assets/welcome-bird.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(11px);
+  transform: scale(1.08);
+  pointer-events: none;
+}
+
+.welcome-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.32);
+  pointer-events: none;
 }
 
 .welcome-card__title {
   position: relative;
+  z-index: 2;
   margin: 0 0 10px;
   font-family: var(--serif);
   font-size: 34px;
@@ -106,6 +119,7 @@
 
 .welcome-card__subtitle {
   position: relative;
+  z-index: 2;
   margin: 0 0 18px;
   font-family: var(--serif);
   font-size: 16px;
@@ -114,6 +128,8 @@
 }
 
 .welcome-card__cta {
+  position: relative;
+  z-index: 2;
   --background: #ffffff;
   --color: #111827;
   --border-radius: 12px;
