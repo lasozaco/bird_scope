@@ -86,14 +86,13 @@
 
 .welcome-card__bg {
   position: absolute;
-  inset: -28px;
+  inset: -6px;
   z-index: 0;
   background-image: url('/assets/welcome-bird.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  filter: blur(11px);
-  transform: scale(1.08);
+  filter: blur(3px);
   pointer-events: none;
 }
 
@@ -102,7 +101,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: rgba(0, 0, 0, 0.32);
+  background: rgba(0, 0, 0, 0.26);
   pointer-events: none;
 }
 
