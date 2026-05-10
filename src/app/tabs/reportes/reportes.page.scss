@@ -1,7 +1,7 @@
 :host {
   --page-bg: #f6f4ef;
   --card-bg: #ffffff;
-  --card-border: rgba(15, 23, 42, 0.10);
+  --card-border: rgba(3, 10, 27, 0.1);
   --green: #1f6f49;
   --gold: #9a6a00;
   --teal: #0f8b8d;
@@ -281,3 +281,75 @@
   margin-top: 14px;
 }
 
+// Reportes específicos
+
+.historial {
+  margin-top: 16px;
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+}
+
+.avistamiento-card {
+  display: flex;
+  gap: 12px;
+  background: var(--ion-color-light);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+
+  &__img {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  &__especie {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  &__meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__fecha {
+    font-size: 0.8rem;
+    color: var(--ion-color-medium);
+  }
+
+  &__gps {
+    font-size: 0.8rem;
+    color: var(--ion-color-medium);
+  }
+}
+
+.badge-confianza {
+  background: var(--ion-color-success);
+  color: white;
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}

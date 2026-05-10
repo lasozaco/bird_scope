@@ -6,7 +6,11 @@
       </div>
       <div class="brand__text">
         <div class="brand__title">
-          <img class="brand__wordmark" src="assets/brand-wordmark.png" alt="BirdScope" />
+          <img
+            class="brand__wordmark"
+            src="assets/brand-wordmark.png"
+            alt="BirdScope"
+          />
         </div>
       </div>
     </div>
@@ -15,28 +19,180 @@
 
 <ion-content [fullscreen]="true" class="home-content">
   <div class="home">
+    <!-- Hero -->
     <section class="welcome-card" aria-label="Bienvenida">
       <div class="welcome-card__bg" aria-hidden="true"></div>
+
+      <!-- Pájaro animado SVG -->
+      <div class="bird-wrap" aria-hidden="true">
+        <svg
+          class="bird"
+          viewBox="0 0 140 90"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!-- Cola -->
+          <ellipse
+            cx="25"
+            cy="55"
+            rx="18"
+            ry="7"
+            fill="#1a3a5c"
+            transform="rotate(-15 25 55)"
+          />
+          <!-- Cuerpo -->
+          <ellipse cx="62" cy="52" rx="26" ry="18" fill="#1a3a5c" />
+          <!-- Vientre blanco -->
+          <ellipse cx="68" cy="56" rx="16" ry="11" fill="#f0f0f0" />
+          <!-- Cabeza -->
+          <circle cx="90" cy="38" r="14" fill="#1a3a5c" />
+          <!-- Mancha amarilla pecho -->
+          <ellipse cx="90" cy="34" rx="8" ry="6" fill="#f5c518" />
+          <!-- Ojo -->
+          <circle cx="95" cy="33" r="4" fill="#ffffff" />
+          <circle cx="96" cy="33" r="2" fill="#111" />
+          <circle cx="97" cy="32" r="0.8" fill="white" />
+          <!-- Pico tucán grande -->
+          <path d="M100,34 Q120,28 122,36 Q120,44 100,42 Z" fill="#f5a623" />
+          <path d="M100,34 Q120,28 122,36 L100,36 Z" fill="#e8891a" />
+          <!-- Franja pico -->
+          <path
+            d="M108,30 Q118,30 121,36"
+            stroke="#c0392b"
+            stroke-width="1.5"
+            fill="none"
+          />
+          <!-- Alas animadas -->
+          <ellipse
+            class="wing-left"
+            cx="55"
+            cy="46"
+            rx="22"
+            ry="10"
+            fill="#2980b9"
+          />
+          <ellipse
+            class="wing-right"
+            cx="68"
+            cy="46"
+            rx="22"
+            ry="10"
+            fill="#2980b9"
+          />
+          <!-- Detalle ala -->
+          <ellipse
+            class="wing-left"
+            cx="55"
+            cy="46"
+            rx="14"
+            ry="6"
+            fill="#3498db"
+            opacity="0.6"
+          />
+          <!-- Patas -->
+          <line
+            x1="58"
+            y1="70"
+            x2="52"
+            y2="82"
+            stroke="#555"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <line
+            x1="66"
+            y1="70"
+            x2="70"
+            y2="82"
+            stroke="#555"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <line
+            x1="52"
+            y1="82"
+            x2="46"
+            y2="80"
+            stroke="#555"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <line
+            x1="52"
+            y1="82"
+            x2="52"
+            y2="87"
+            stroke="#555"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <line
+            x1="52"
+            y1="82"
+            x2="58"
+            y2="80"
+            stroke="#555"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <line
+            x1="70"
+            y1="82"
+            x2="64"
+            y2="80"
+            stroke="#555"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <line
+            x1="70"
+            y1="82"
+            x2="70"
+            y2="87"
+            stroke="#555"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <line
+            x1="70"
+            y1="82"
+            x2="76"
+            y2="80"
+            stroke="#555"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+
       <h1 class="welcome-card__title">Bienvenido a BirdScope</h1>
       <p class="welcome-card__subtitle">
-        Descubre y registra las aves del departamento
-        <br />
-        del Tolima, Colombia
+        Descubre y registra las aves del departamento<br />del Tolima, Colombia
       </p>
-
-      <ion-button class="welcome-card__cta" fill="solid">
+      <ion-button
+        class="welcome-card__cta"
+        fill="solid"
+        (click)="irAClasificar()"
+      >
         <ion-icon slot="start" name="camera-outline"></ion-icon>
-        Identificar Ave
+        Identificar Ave 🐦
       </ion-button>
     </section>
 
+    <!-- Stats -->
     <section class="stats" aria-label="Estadísticas">
       <div class="stat-card">
-        <div class="stat-card__value">0</div>
+        <div class="stat-card__value" [class.loading]="cargando">
+          {{ cargando ? '—' : totalObservaciones }}
+        </div>
         <div class="stat-card__label">Observaciones</div>
       </div>
       <div class="stat-card">
-        <div class="stat-card__value stat-card__value--gold">0</div>
+        <div
+          class="stat-card__value stat-card__value--gold"
+          [class.loading]="cargando"
+        >
+          {{ cargando ? '—' : totalEspecies }}
+        </div>
         <div class="stat-card__label">Especies Vistas</div>
       </div>
     </section>
@@ -45,37 +201,31 @@
 
     <section class="quick-actions" aria-label="Acciones rápidas">
       <a class="action-card" [routerLink]="['/tabs/clasificar']">
-        <div class="action-card__icon action-card__icon--green" aria-hidden="true">
+        <div class="action-card__icon action-card__icon--green">
           <ion-icon name="camera-outline"></ion-icon>
         </div>
         <div class="action-card__title">Clasificar Ave</div>
         <div class="action-card__subtitle">Identifica una especie</div>
       </a>
-
       <a class="action-card" [routerLink]="['/tabs/especies']">
-        <div class="action-card__icon action-card__icon--gold" aria-hidden="true">
+        <div class="action-card__icon action-card__icon--gold">
           <ion-icon name="leaf-outline"></ion-icon>
         </div>
         <div class="action-card__title">Ver Especies</div>
-        <div class="action-card__subtitle">18 especies registradas</div>
+        <div class="action-card__subtitle">41 especies registradas</div>
       </a>
     </section>
 
     <section class="tools" aria-label="Herramientas">
       <a class="tool-card" [routerLink]="['/tabs/mapa']">
-        <div class="tool-card__icon tool-card__icon--teal" aria-hidden="true">
+        <div class="tool-card__icon tool-card__icon--teal">
           <ion-icon name="location-outline"></ion-icon>
         </div>
-        <div class="tool-card__title">
-          Mapa de
-          <br />
-          Avistamientos
-        </div>
+        <div class="tool-card__title">Mapa de<br />Avistamientos</div>
         <div class="tool-card__subtitle">Explora ubicaciones</div>
       </a>
-
       <a class="tool-card" [routerLink]="['/tabs/reportes']">
-        <div class="tool-card__icon tool-card__icon--orange" aria-hidden="true">
+        <div class="tool-card__icon tool-card__icon--orange">
           <ion-icon name="bar-chart-outline"></ion-icon>
         </div>
         <div class="tool-card__title">Estadísticas</div>
@@ -89,37 +239,65 @@
     </div>
 
     <section class="featured" aria-label="Especies destacadas">
+      @for (e of especiesDestacadas; track e.nombre) {
       <a class="species-card" [routerLink]="['/tabs/especies']">
         <div class="species-card__media" aria-hidden="true">
+          @if (e.imagen) {
+          <img [src]="e.imagen" [alt]="e.nombre" class="species-card__img" />
+          } @else {
           <ion-icon name="leaf-outline"></ion-icon>
+          }
         </div>
-        <div class="species-card__name">Loro Coroniamarillo</div>
-        <div class="species-card__latin">Amazona ochrocephala</div>
+        <div class="species-card__name">{{ e.nombre }}</div>
+        <div class="species-card__latin">{{ e.latin }}</div>
       </a>
-
-      <a class="species-card" [routerLink]="['/tabs/especies']">
-        <div class="species-card__media" aria-hidden="true">
-          <ion-icon name="leaf-outline"></ion-icon>
-        </div>
-        <div class="species-card__name">Barranquero Coro…</div>
-        <div class="species-card__latin">Momotus momota</div>
-      </a>
-
-      <a class="species-card" [routerLink]="['/tabs/especies']" aria-label="Ver más especies">
-        <div class="species-card__media" aria-hidden="true">
-          <ion-icon name="leaf-outline"></ion-icon>
-        </div>
-        <div class="species-card__name">...</div>
-        <div class="species-card__latin">&nbsp;</div>
-      </a>
+      }
     </section>
 
     <section class="about" aria-label="Acerca de BirdScope">
       <h2 class="about__title">Acerca de BirdScope</h2>
       <p class="about__text">
-        Esta aplicación utiliza inteligencia artificial para ayudarte a identificar las 18 especies de aves más comunes del departamento del Tolima. Registra tus avistamientos y contribuye a la conservación de nuestra biodiversidad.
+        Esta aplicación utiliza inteligencia artificial para ayudarte a
+        identificar las 41 especies de aves más comunes del departamento del
+        Tolima. Registra tus avistamientos y contribuye a la conservación de
+        nuestra biodiversidad.
       </p>
     </section>
+
+    <!-- Logo Universidad -->
+    <footer class="university-footer">
+      <!-- ✅ LOGO -->
+      <img
+        src="assets/icon/ucc-logo.png"
+        alt="Universidad Cooperativa de Colombia"
+        class="university-footer__logo"
+        onerror="
+          this.style.display = 'none';
+          this.nextElementSibling.style.display = 'block';
+        "
+      />
+
+      <!-- fallback si no carga logo -->
+      <p class="university-footer__fallback" style="display: none">
+        Universidad Cooperativa de Colombia
+      </p>
+
+      <!-- ✅ INFORMACIÓN -->
+      <p class="university-footer__text">
+        Universidad Cooperativa de Colombia<br />
+        <span>Facultad de Ingeniería · Ibagué, Tolima</span>
+      </p>
+
+      <!-- ✅ ESTUDIANTE -->
+      <p class="university-footer__author">
+        Estudiante: Kevin Julián Guerrero Penagos
+      </p>
+      <p class="university-footer__author">
+        Estudiante: Laura Sophia Zapata Coronado
+      </p>
+
+      <!-- ✅ DOCENTE -->
+      <p class="university-footer__author">Docente: Ingeniero Oscar Díaz</p>
+    </footer>
   </div>
 </ion-content>
-

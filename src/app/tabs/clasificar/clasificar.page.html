@@ -6,7 +6,11 @@
       </div>
       <div class="brand__text">
         <div class="brand__title">
-          <img class="brand__wordmark" src="assets/brand-wordmark.png" alt="BirdScope" />
+          <img
+            class="brand__wordmark"
+            src="assets/brand-wordmark.png"
+            alt="BirdScope"
+          />
         </div>
       </div>
     </div>
@@ -17,37 +21,193 @@
   <div class="page">
     <section class="capture-card" aria-label="Capturar o cargar imagen">
       <div class="capture-card__inner">
-        <ion-button class="capture-card__primary" fill="solid">
+        <div class="preview-box" *ngIf="imagenPreview">
+          <img
+            [src]="imagenPreview"
+            alt="Imagen capturada"
+            class="preview-img"
+          />
+        </div>
+
+        <ion-button
+          class="capture-card__primary"
+          fill="solid"
+          (click)="tomarFoto()"
+          [disabled]="!modeloCargado"
+        >
           <ion-icon slot="start" name="camera-outline"></ion-icon>
           Usar Cámara
         </ion-button>
 
-        <ion-button class="capture-card__secondary" fill="solid">
+        <ion-button
+          class="capture-card__secondary"
+          fill="solid"
+          (click)="cargarDeGaleria()"
+          [disabled]="!modeloCargado"
+        >
           <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
           Cargar Imagen
         </ion-button>
 
-        <p class="capture-card__hint">
-          Toma una foto o carga una imagen de un ave
-          <br />
-          para identificarla
+        <p class="capture-card__hint" *ngIf="!modeloCargado">
+          ⏳ Cargando modelo de IA...
+        </p>
+        <p class="capture-card__hint" *ngIf="modeloCargado && !imagenPreview">
+          Toma una foto o carga una imagen de un ave para identificarla
         </p>
       </div>
     </section>
 
-    <section class="tips-card" aria-label="Consejos">
+    <!-- LOADING -->
+    <div class="loading-overlay" *ngIf="cargando">
+      <div class="logo-spinner-wrapper">
+        <img class="logo-center" src="assets/brand-logo.png" alt="BirdScope" />
+        <div class="spinner-ring"></div>
+        <svg class="progress-ring" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="45"></circle>
+        </svg>
+      </div>
+      <p class="loading-text">🐦 Analizando ave...</p>
+      <p class="loading-subtitle">Procesando imagen con IA</p>
+    </div>
+
+    <!-- RESULTADOS + CONFIRMACIÓN -->
+    <ion-card
+      class="resultado-card"
+      *ngIf="topResultados.length > 0 && !cargando"
+    >
+      <ion-card-header>
+        <ion-card-title>Aves Posibles 🐦</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+        <!-- Las 3 opciones con barras -->
+        <div
+          *ngFor="let r of topResultados; let i = index"
+          class="resultado-item"
+        >
+          <div class="resultado-item__rank">#{{ i + 1 }}</div>
+          <div class="resultado-item__info">
+            <p class="resultado-item__nombre">{{ r.especie }}</p>
+            <ion-badge
+              [color]="i === 0 ? 'success' : i === 1 ? 'warning' : 'medium'"
+            >
+              {{ r.confianza }}% confianza
+            </ion-badge>
+          </div>
+        </div>
+
+        <!-- ✅ AUTO-CONFIRMADA (≥70%) -->
+        <div class="autoconfirm-box" *ngIf="autoConfirmada && confirmada">
+          <p class="autoconfirm-badge">🤖 Alta confianza: {{ confianza }}%</p>
+          <p class="autoconfirm-nombre">{{ aveConfirmada }}</p>
+          <p class="autoconfirm-sub">
+            Identificada y guardada automáticamente ✅
+          </p>
+          <ion-button
+            fill="outline"
+            size="small"
+            class="btn-rebuscar"
+            (click)="buscarEnGoogleAve(aveConfirmada)"
+          >
+            <ion-icon slot="start" name="open-outline"></ion-icon>
+            Ver más sobre esta ave
+          </ion-button>
+        </div>
+
+        <!-- 🙋 CONFIRMACIÓN MANUAL (<70%) -->
+        <div class="confirm-section" *ngIf="!confirmada">
+          <p class="confirm-title">¿Cuál es el ave correcta?</p>
+          <p class="confirm-subtitle">
+            El modelo no está seguro. Selecciona la correcta para confirmar
+          </p>
+
+          <div class="confirm-options">
+            <button
+              *ngFor="let r of topResultados; let i = index"
+              class="confirm-btn"
+              [class.confirm-btn--selected]="aveSeleccionada === r.especie"
+              (click)="seleccionarAve(r.especie)"
+            >
+              <span class="confirm-btn__rank">#{{ i + 1 }}</span>
+              <span class="confirm-btn__nombre">{{ r.especie }}</span>
+            </button>
+          </div>
+
+          <div class="confirm-actions" *ngIf="aveSeleccionada">
+            <ion-button
+              class="btn-buscar"
+              fill="outline"
+              (click)="buscarEnGoogle()"
+            >
+              <ion-icon slot="start" name="search-outline"></ion-icon>
+              Buscar "{{ aveSeleccionada }}" en Google
+            </ion-button>
+            <ion-button
+              class="btn-confirmar"
+              fill="solid"
+              (click)="confirmarAve()"
+            >
+              <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+              ¡Es esta ave!
+            </ion-button>
+          </div>
+
+          <!-- ❌ NINGUNA (solo si confianza < 45%) -->
+          <div class="ninguna-section" *ngIf="confianza < 45">
+            <ion-button class="btn-ninguna" fill="clear" (click)="toggleNinguna()">
+              <ion-icon slot="start" name="close-outline"></ion-icon>
+              Ninguna es correcta
+            </ion-button>
+
+            <div class="ninguna-input-box" *ngIf="mostrarNinguna">
+              <p class="ninguna-hint">¿Sabes cómo se llama? (opcional)</p>
+              <input
+                class="ninguna-input"
+                type="text"
+                placeholder="Escribe el nombre del ave..."
+                [(ngModel)]="nombreManual"
+              />
+              <ion-button
+                class="btn-reportar"
+                fill="solid"
+                (click)="reportarNoIdentificada()"
+              >
+                Enviar reporte
+              </ion-button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ✅ CONFIRMADA MANUALMENTE -->
+        <div class="confirmada-box" *ngIf="confirmada && !autoConfirmada">
+          <ion-icon name="checkmark-circle" class="confirmada-icon"></ion-icon>
+          <p class="confirmada-nombre">{{ aveConfirmada }}</p>
+          <p class="confirmada-sub">Confirmada y guardada en Firebase ✅</p>
+          <ion-button
+            fill="outline"
+            size="small"
+            class="btn-rebuscar"
+            (click)="buscarEnGoogleAve(aveConfirmada)"
+          >
+            <ion-icon slot="start" name="open-outline"></ion-icon>
+            Ver más sobre esta ave
+          </ion-button>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+    <section class="tips-card" aria-label="Consejos" *ngIf="!imagenPreview">
       <h2 class="tips-card__title">Consejos para una mejor identificación</h2>
       <ul class="tips-card__list">
         <li>Toma la foto con buena iluminación</li>
         <li>Intenta capturar el ave de perfil</li>
         <li>Acércate lo más posible sin asustar al ave</li>
-        <li>
-          Incluye características distintivas como plumaje
-          <br />
-          y pico
-        </li>
+        <li>Incluye características distintivas como plumaje y pico</li>
       </ul>
     </section>
+
   </div>
 </ion-content>
-

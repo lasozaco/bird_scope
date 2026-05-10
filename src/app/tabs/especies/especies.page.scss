@@ -220,3 +220,253 @@
   font-size: 20px;
   color: rgba(17, 24, 39, 0.35);
 }
+
+/* ── Chips de recomendación ── */
+.recomendaciones {
+  margin-bottom: 16px;
+}
+
+.recomendaciones__titulo {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.recomendaciones__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active { transform: scale(0.95); }
+}
+
+// Esta clase es para el chip de "Otras especies" que aparece junto a las recomendaciones,
+// y al hacer click en ella se generan nuevas recomendaciones aleatorias. Es una forma de 
+//incentivar al usuario a explorar otras especies que ha observado pero no recuerda,
+// o simplemente descubrir nuevas especies.
+.chip--refresh {
+  background: var(--ion-color-primary, #1f6f49);
+  color: white;
+  font-size: 1rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* ── Badge "Detectada" en la tarjeta ── */
+.species-card__detected {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: #1b5e20;
+  background: #c8e6c9;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-sheet {
+  width: 100%;
+  max-height: 82vh;
+  background: #ffffff;
+  border-radius: 24px 24px 0 0;
+  padding: 0 20px 40px;
+  overflow-y: auto;
+  animation: slideUp 0.28s cubic-bezier(.22,.68,0,1.2);
+}
+
+.modal-handle {
+  width: 40px;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  margin: 12px auto 0;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 8px;
+}
+
+.modal-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #e8f5e9;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  font-size: 26px;
+}
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: none;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.modal-name {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+
+.modal-latin {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--muted);
+  font-style: italic;
+  margin: 0 0 12px;
+}
+
+.modal-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.modal-tag {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.modal-tag--family {
+  background: #f3f4f6;
+  color: var(--muted);
+}
+
+.modal-tag--status {
+  background: var(--badge-green);
+  color: #fff;
+}
+
+.modal-section {
+  margin-bottom: 16px;
+}
+
+.modal-section__label {
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin: 0 0 4px;
+}
+
+.modal-section__text {
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.modal-detected {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+
+  ion-icon { font-size: 20px; }
+
+  &--yes {
+    background: #e8f5e9;
+    color: #1b5e20;
+  }
+
+  &--no {
+    background: #fff8e1;
+    color: #e65100;
+  }
+}
+
+.modal-cta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  ion-icon { font-size: 20px; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+// Estilos para las imágenes detectadas en el modal
+.modal-photos {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.modal-photo {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+  border: 2px solid #e8f5e9;
+}

@@ -6,7 +6,11 @@
       </div>
       <div class="brand__text">
         <div class="brand__title">
-          <img class="brand__wordmark" src="assets/brand-wordmark.png" alt="BirdScope" />
+          <img
+            class="brand__wordmark"
+            src="assets/brand-wordmark.png"
+            alt="BirdScope"
+          />
         </div>
       </div>
     </div>
@@ -19,7 +23,7 @@
       class="species-search"
       [value]="search()"
       (ionInput)="onSearchInput($event)"
-      placeholder="Buscar por nombre o característica..."
+      placeholder="Buscar por nombre, hábitat o característica..."
       [showClearButton]="'focus'"
       [debounce]="0"
     ></ion-searchbar>
@@ -33,7 +37,7 @@
       >
         <ion-select-option value="all">Todas las familias</ion-select-option>
         @for (f of families(); track f) {
-          <ion-select-option [value]="f">{{ f }}</ion-select-option>
+        <ion-select-option [value]="f">{{ f }}</ion-select-option>
         }
       </ion-select>
 
@@ -44,37 +48,126 @@
         interface="popover"
       >
         <ion-select-option value="name">Nombre</ion-select-option>
-        <ion-select-option value="scientific">Nombre científico</ion-select-option>
+        <ion-select-option value="scientific"
+          >Nombre científico</ion-select-option
+        >
       </ion-select>
     </div>
 
     <p class="results-count">{{ resultCount() }} especies encontradas</p>
 
+    <!-- Chips aleatorios (solo cuando buscador vacío) -->
+    @if (search().trim().length === 0) {
+    <div class="recomendaciones">
+      <p class="recomendaciones__titulo">🌟 Descubre una especie:</p>
+      <div class="recomendaciones__chips">
+        @for (s of randomChips(); track s.commonName) {
+        <span class="chip" (click)="seleccionarChip(s.commonName)">
+          {{ s.commonName }}
+        </span>
+        }
+        <span
+          class="chip chip--refresh"
+          (click)="shuffleChips()"
+          title="Otras especies"
+        >
+          🔀
+        </span>
+      </div>
+    </div>
+    }
+
+    <!-- Lista de especies -->
     <ul class="species-list" role="list">
       @for (s of filteredSpecies(); track s.commonName + s.scientificName) {
-        <li>
-          <button type="button" class="species-card">
-            <div class="species-card__icon" aria-hidden="true">
-              <ion-icon name="leaf-outline"></ion-icon>
+      <li>
+        <button type="button" class="species-card" (click)="openSpecies(s)">
+          <div class="species-card__icon" aria-hidden="true">
+            <ion-icon name="leaf-outline"></ion-icon>
+          </div>
+          <div class="species-card__body">
+            <div class="species-card__name">{{ s.commonName }}</div>
+            <div class="species-card__latin">
+              <em>{{ s.scientificName }}</em>
             </div>
-            <div class="species-card__body">
-              <div class="species-card__name">{{ s.commonName }}</div>
-              <div class="species-card__latin">
-                <em>{{ s.scientificName }}</em>
-              </div>
-              <div class="species-card__meta">
-                <span class="species-card__family">{{ s.family }}</span>
-                <span class="species-card__badge">{{ s.status }}</span>
-              </div>
+            <div class="species-card__meta">
+              <span class="species-card__family">{{ s.family }}</span>
+              <span class="species-card__badge">{{ s.status }}</span>
+              @if (detectedSpecies.has(s.commonName.toLowerCase())) {
+              <span class="species-card__detected">📍 Detectada</span>
+              }
             </div>
-            <ion-icon
-              class="species-card__chevron"
-              name="chevron-forward-outline"
-              aria-hidden="true"
-            ></ion-icon>
-          </button>
-        </li>
+          </div>
+          <ion-icon
+            class="species-card__chevron"
+            name="chevron-forward-outline"
+            aria-hidden="true"
+          ></ion-icon>
+        </button>
+      </li>
       }
     </ul>
   </div>
 </ion-content>
+
+<!-- ── Modal de detalle ── -->
+@if (selectedSpecies()) {
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-sheet" (click)="$event.stopPropagation()">
+    <div class="modal-handle"></div>
+
+    <div class="modal-header">
+      <div class="modal-icon">
+        <ion-icon name="leaf-outline"></ion-icon>
+      </div>
+      <button class="modal-close" (click)="closeModal()">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <h2 class="modal-name">{{ selectedSpecies()!.commonName }}</h2>
+      <p class="modal-latin">
+        <em>{{ selectedSpecies()!.scientificName }}</em>
+      </p>
+
+      <!-- Fotos reales -->
+      @if (selectedImages().length > 0) {
+      <div class="modal-photos">
+        @for (img of selectedImages(); track $index) {
+        <img class="modal-photo" [src]="img" alt="Foto registrada" />
+        }
+        
+      </div>
+      } @if (selectedSpecies()!.description) {
+      <div class="modal-section">
+        <p class="modal-section__label">📖 Descripción</p>
+        <p class="modal-section__text">{{ selectedSpecies()!.description }}</p>
+      </div>
+      } @if (selectedSpecies()!.habitat) {
+      <div class="modal-section">
+        <p class="modal-section__label">🌿 Hábitat</p>
+        <p class="modal-section__text">{{ selectedSpecies()!.habitat }}</p>
+      </div>
+      }
+
+      <!-- Estado detección -->
+      @if (speciesDetected()) {
+      <div class="modal-detected modal-detected--yes">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        <span>¡Ya tienes un registro de esta ave!</span>
+      </div>
+      } @else {
+      <div class="modal-detected modal-detected--no">
+        <ion-icon name="camera-outline"></ion-icon>
+        <span>Aún no has registrado esta especie</span>
+      </div>
+      <button class="modal-cta" (click)="goToClasificar()">
+        <ion-icon name="camera-outline"></ion-icon>
+        Clasificar esta ave
+      </button>
+      }
+    </div>
+  </div>
+</div>
+}
