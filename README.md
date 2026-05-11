@@ -1,165 +1,189 @@
+<div align="center">
+
 # 🐦 BirdScope
 
-> Aplicación móvil híbrida desarrollada con **Ionic + Angular + TensorFlow.js** para la identificación inteligente de aves del departamento del Tolima, Colombia 🇨🇴.
+### Intelligent Mobile Bird Recognition System using AI + TensorFlow.js
+
+<br>
+
+<img src="https://img.shields.io/badge/Ionic-MobileApp-3880FF?style=for-the-badge&logo=ionic&logoColor=white">
+<img src="https://img.shields.io/badge/Angular-Frontend-DD0031?style=for-the-badge&logo=angular&logoColor=white">
+<img src="https://img.shields.io/badge/TensorFlow.js-ArtificialIntelligence-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white">
+<img src="https://img.shields.io/badge/Firebase-Backend-FFCA28?style=for-the-badge&logo=firebase&logoColor=black">
+<img src="https://img.shields.io/badge/Leaflet-InteractiveMaps-199900?style=for-the-badge">
+<img src="https://img.shields.io/badge/DeepLearning-MobileAI-8A2BE2?style=for-the-badge">
+
+<br><br>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:134E5E,50:71B280,100:2C5364&height=200&section=header&text=BirdScope&fontSize=55&fontColor=ffffff&animation=fadeIn"/>
+
+</div>
 
 ---
 
-# 📱 Descripción General
+# 📱 Project Overview
 
-**BirdScope** es una aplicación móvil orientada a la observación, identificación y registro de aves mediante técnicas de **Inteligencia Artificial** y **Visión por Computadora**.
+BirdScope is a hybrid mobile application focused on intelligent bird recognition using Artificial Intelligence and Computer Vision techniques.
 
-La aplicación permite capturar imágenes desde la cámara del dispositivo o seleccionar fotografías desde la galería para clasificarlas automáticamente utilizando un modelo de Deep Learning entrenado específicamente con **41 especies de aves del Tolima**.
+The system allows users to capture bird images directly from the mobile camera or upload images from the gallery and automatically classify species using a Deep Learning model trained with **41 bird species from Tolima, Colombia 🇨🇴**.
 
-Además, integra funcionalidades modernas como:
-
-- 📷 Clasificación en tiempo real
-- 📍 Geolocalización GPS automática
-- ☁️ Sincronización con Firebase
-- 🗺️ Visualización en mapas interactivos
-- 📊 Estadísticas dinámicas
-- 🧠 Inferencia IA directamente en el dispositivo
+The application integrates modern mobile technologies, real-time cloud synchronization, geolocation systems, interactive maps, and on-device AI inference using TensorFlow.js.
 
 ---
 
-# 🚀 Tecnologías Utilizadas
+# 🚀 Core Features
 
-| Tecnología | Descripción |
+<div align="center">
+
+| Feature | Description |
 |---|---|
-| Ionic | Framework híbrido móvil |
-| Angular | Framework frontend |
-| TypeScript | Lenguaje principal |
-| Capacitor | Acceso a hardware nativo |
-| SCSS | Diseño visual y estilos |
-| TensorFlow.js | Inferencia de IA en el cliente |
-| Firebase Firestore | Base de datos en tiempo real |
-| Firebase Storage | Almacenamiento de imágenes |
-| Firebase Authentication | Gestión de autenticación |
-| Leaflet | Visualización de mapas |
-| OpenStreetMap | Mapas base |
-| MobileNetV2 | Arquitectura CNN base |
-| Deep Learning | Clasificación de especies |
+| 🧠 AI Classification | Real-time bird recognition |
+| 📷 Camera Integration | Mobile camera capture |
+| ☁️ Firebase Backend | Cloud synchronization |
+| 📍 GPS Geolocation | Automatic location tracking |
+| 🗺️ Interactive Maps | Leaflet + OpenStreetMap |
+| 📊 Dynamic Reports | Real-time statistics |
+| 📱 Mobile Optimized | Android/Web compatible |
+| ⚡ TensorFlow.js | On-device inference |
+
+</div>
 
 ---
 
-# ✨ Funcionalidades Principales
-
-## 🏠 Inicio
-- Dashboard interactivo
-- Estadísticas dinámicas
-- Accesos rápidos
-- Especies destacadas
-- Diseño responsive moderno
+# ✨ Main Modules
 
 ---
 
-## 🧠 Clasificación Inteligente
-- Captura desde cámara
-- Carga desde galería
-- Clasificación automática en tiempo real
-- Top 3 de predicciones
-- Porcentaje de confianza
-- Confirmación manual de especies
-- Sistema de reporte de especies no identificadas
-- Compresión automática de imágenes
-- Integración con TensorFlow.js
+## 🏠 Home Dashboard
+
+- Interactive dashboard
+- Dynamic statistics
+- Featured species
+- Quick access modules
+- Responsive UI design
+- Real-time Firebase data
 
 ---
 
-## 🌿 Catálogo de Especies
-- 41 especies registradas
-- Búsqueda avanzada en tiempo real
-- Filtros por familia
-- Ordenamiento dinámico
-- Modal interactivo por especie
-- Chips aleatorios de recomendación
-- Información científica y hábitat
-- Detección de especies registradas por usuario
+## 🧠 Intelligent Classification
+
+- Camera capture
+- Gallery image upload
+- Real-time classification
+- Top-3 predictions
+- Confidence percentage
+- Species confirmation
+- Unknown species reporting
+- Automatic image compression
+- TensorFlow.js integration
+- On-device inference
 
 ---
 
-## 🗺️ Mapa Inteligente
-- Visualización GPS de avistamientos
-- Marcadores dinámicos por especie
-- Colores personalizados
-- Búsqueda inteligente de aves
-- Navegación automática hacia registros
-- Popups interactivos
-- Vista mapa/lista
-- Leaflet + OpenStreetMap
+## 🌿 Species Catalog
+
+- 41 registered species
+- Real-time search engine
+- Family filtering
+- Dynamic sorting
+- Interactive species modal
+- Scientific information
+- Habitat details
+- Species recommendations
+- Registered species detection
 
 ---
 
-## 📊 Reportes y Estadísticas
-- Total de observaciones
-- Número de especies únicas
-- Promedio de confianza IA
-- Historial completo
-- Barra de progreso de colección
-- Últimos avistamientos
-- Estadísticas conectadas en tiempo real con Firebase
+## 🗺️ Smart Interactive Map
+
+- GPS bird sightings
+- Dynamic markers
+- Species color identification
+- Smart search system
+- Automatic map navigation
+- Interactive popups
+- Map/List visualization
+- OpenStreetMap integration
+- Leaflet rendering
 
 ---
 
-# 🧠 Inteligencia Artificial
+## 📊 Reports & Statistics
 
-## Arquitectura del Modelo
+- Total observations
+- Unique species count
+- Average AI confidence
+- Full observation history
+- Collection progress bars
+- Latest sightings
+- Firebase real-time statistics
 
-BirdScope utiliza un modelo basado en **Transfer Learning** para optimizar precisión y rendimiento móvil.
+---
 
-### 🔹 Modelo Padre
-Modelo CNN pesado utilizado durante entrenamiento y extracción de características.
+# 🧠 Artificial Intelligence Pipeline
 
-### 🔹 Modelo Hijo
-Modelo optimizado para dispositivos móviles:
+BirdScope uses a Deep Learning architecture optimized for mobile inference through Transfer Learning techniques.
+
+---
+
+## 🏗️ Model Architecture
+
+| Model | Purpose |
+|---|---|
+| Parent CNN | Feature extraction |
+| Child CNN | Mobile classification |
+| TensorFlow.js | On-device inference |
+| MobileNetV2 | Base architecture |
+
+---
+
+## 📦 Optimized Mobile Model
 
 ```txt
 hijo_fase2_FINAL.keras
 ```
 
-Características:
+### Features
 
-- Clasificación de 41 especies
-- Optimizado para TensorFlow.js
-- Inferencia local sin servidor
-- Compatible con móviles Android/Web
+- 41 bird species classification
+- TensorFlow.js optimized
+- Fast mobile inference
+- Android/Web compatible
+- Offline inference support
+- Lightweight architecture
 
 ---
 
-# 🔄 Conversión del Modelo
+# 🔄 TensorFlow.js Conversion Pipeline
 
-Proceso utilizado para exportar el modelo a TensorFlow.js:
+```mermaid
+graph TD;
 
-```txt
-Modelo .keras
-        ↓
-SavedModel TensorFlow
-        ↓
-Conversión TFJS GraphModel
-        ↓
-model.json + shards .bin
-        ↓
-src/assets/model/
-        ↓
-Carga en Ionic con tf.loadGraphModel()
+A[.keras Model] --> B[TensorFlow SavedModel]
+B --> C[TFJS GraphModel Conversion]
+C --> D[model.json + .bin shards]
+D --> E[src/assets/model]
+E --> F[TensorFlow.js Inference]
 ```
 
 ---
 
-## 📂 Estructura del Modelo
+# 📂 AI Model Structure
 
 ```txt
 src/assets/model/
 ├── model.json
 ├── group1-shard1of3.bin
 ├── group1-shard2of3.bin
-└── group1-shard3of3.bin
+├── group1-shard3of3.bin
+└── weights.bin
 ```
 
 ---
 
-# 🐦 Especies Soportadas
+# 🐦 Supported Bird Species
 
-El sistema reconoce automáticamente **41 especies de aves** del Tolima, incluyendo:
+The application recognizes **41 bird species from Tolima, Colombia**, including:
 
 - Aguililla Caminera
 - Bananaquit
@@ -171,25 +195,31 @@ El sistema reconoce automáticamente **41 especies de aves** del Tolima, incluye
 - Zopilote Común
 - Benteveo
 - Tortolita Canela
-- entre otras...
+- And many more...
 
 ---
 
-# ☁️ Firebase
+# ☁️ Firebase Backend
 
-BirdScope utiliza Firebase como infraestructura backend completa.
+BirdScope uses Firebase as a centralized backend infrastructure.
 
-## Servicios Integrados
+---
 
-| Servicio | Uso |
+## 🔥 Integrated Firebase Services
+
+<div align="center">
+
+| Service | Purpose |
 |---|---|
-| Firestore | Base de datos de avistamientos |
-| Storage | Imágenes registradas |
-| Authentication | Gestión de usuarios |
+| Firestore | Bird sightings database |
+| Firebase Storage | Image storage |
+| Firebase Authentication | User management |
+
+</div>
 
 ---
 
-## 📄 Ejemplo de Documento Firestore
+# 📄 Example Firestore Document
 
 ```json
 {
@@ -204,27 +234,53 @@ BirdScope utiliza Firebase como infraestructura backend completa.
 
 ---
 
-# 📷 Flujo del Sistema
+# 🤝 Shared Firebase Architecture
 
-```txt
-📷 Cámara / Galería
-          ↓
-🖼️ Captura de Imagen
-          ↓
-🧠 TensorFlow.js
-          ↓
-🐦 Clasificación IA
-          ↓
-📍 GPS Automático
-          ↓
-☁️ Firebase Firestore
-          ↓
-📊 Reportes y Estadísticas
+BirdScope uses a single Firebase project as a centralized backend system.
+
+This architecture allows multiple development team members to run the application from different devices (PC or mobile) while working with the same real-time database and cloud infrastructure.
+
+The system supports:
+
+- Shared Firestore synchronization
+- Shared image storage
+- Real-time updates
+- Collaborative development workflows
+- Cross-device synchronization
+
+---
+
+# 🏗️ System Architecture
+
+```mermaid
+graph LR;
+
+A[Ionic + Angular] --> B[TensorFlow.js]
+B --> C[Firebase Backend]
+C --> D[Firestore]
+C --> E[Storage]
+A --> F[Leaflet Maps]
+A --> G[Capacitor Camera]
 ```
 
 ---
 
-# 📂 Estructura del Proyecto
+# 🔄 Application Workflow
+
+```mermaid
+graph TD;
+
+A[📷 Camera / Gallery] --> B[🖼 Image Capture]
+B --> C[🧠 TensorFlow.js]
+C --> D[🐦 Bird Classification]
+D --> E[📍 GPS Location]
+E --> F[☁️ Firebase]
+F --> G[📊 Reports & Statistics]
+```
+
+---
+
+# 📂 Project Structure
 
 ```txt
 src/
@@ -247,17 +303,19 @@ src/
 
 ---
 
-# ⚙️ Instalación
+# ⚙️ Installation Guide
 
-## Clonar repositorio
+---
+
+## 📥 Clone Repository
 
 ```bash
-git clone <url-del-repo>
+git clone <repository-url>
 ```
 
 ---
 
-## Instalar dependencias
+## 📦 Install Dependencies
 
 ```bash
 npm install --legacy-peer-deps
@@ -265,7 +323,7 @@ npm install --legacy-peer-deps
 
 ---
 
-## Ejecutar en desarrollo
+## ▶️ Run Development Server
 
 ```bash
 ionic serve
@@ -273,7 +331,7 @@ ionic serve
 
 ---
 
-## Ejecutar en red local
+## 🌐 Run on Local Network
 
 ```bash
 ionic serve --host=0.0.0.0 --port=8100
@@ -281,7 +339,7 @@ ionic serve --host=0.0.0.0 --port=8100
 
 ---
 
-# 📱 Compilar para Android
+# 📱 Android Build
 
 ```bash
 ionic build
@@ -291,73 +349,121 @@ npx cap open android
 
 ---
 
-# 🎨 Características UI/UX
+# 🎨 UI/UX Features
 
-- Diseño moderno responsive
-- Animaciones fluidas
-- Componentes Ionic personalizados
-- SCSS modular
-- Experiencia optimizada para móviles
-- Sistema visual de estados
-- Transiciones suaves
-- Cards interactivas
-
----
-
-# 🔒 Características Técnicas
-
-## Optimización implementada
-
-✅ Compresión automática de imágenes  
-✅ Lazy loading de vistas  
-✅ Inferencia local sin servidor  
-✅ Uso de Angular Signals  
-✅ Renderizado eficiente del mapa  
-✅ Optimización de Firebase  
-✅ Manejo reactivo de datos  
-✅ Compatible con dispositivos móviles  
+- Modern responsive design
+- Fluid animations
+- Custom Ionic components
+- Modular SCSS architecture
+- Optimized mobile experience
+- Visual state management
+- Smooth transitions
+- Interactive cards
+- Dynamic layouts
 
 ---
 
-# 👨‍💻 Equipo de Desarrollo
+# 🔒 Technical Optimizations
 
-Proyecto desarrollado para la asignatura:
+<div align="center">
+
+| Optimization | Status |
+|---|---|
+| Automatic image compression | ✅ |
+| Lazy loading views | ✅ |
+| Local AI inference | ✅ |
+| Angular Signals | ✅ |
+| Efficient map rendering | ✅ |
+| Firebase optimization | ✅ |
+| Reactive data handling | ✅ |
+| Mobile compatibility | ✅ |
+
+</div>
+
+---
+
+# 🧪 Technologies Used
+
+<div align="center">
+
+| Technology | Purpose |
+|---|---|
+| Ionic | Hybrid Mobile Framework |
+| Angular | Frontend Framework |
+| TypeScript | Main Language |
+| Capacitor | Native Hardware Access |
+| TensorFlow.js | AI Inference |
+| Firebase | Backend Infrastructure |
+| Firestore | Real-time Database |
+| Leaflet | Interactive Maps |
+| OpenStreetMap | Map Provider |
+| SCSS | UI Styling |
+| Deep Learning | Bird Classification |
+
+</div>
+
+---
+
+# 👨‍💻 Development Team
+
+<div align="center">
 
 ## Electiva III
 
-**Universidad Cooperativa de Colombia**  
-Facultad de Ingeniería  
+### Universidad Cooperativa de Colombia
+
+Faculty of Engineering  
 Ibagué, Tolima — Colombia 🇨🇴
 
-### Integrantes
+<br>
 
-- Kevin Julian Guerrero Penagos
-- Laura Sophia Zapata Coronado
----
+### Developers
 
-# 📌 Estado del Proyecto
+| Name | Role |
+|---|---|
+| Kevin Julian Guerrero Penagos | Backend • AI • Firebase |
+| Laura Sophia Zapata Coronado | Frontend • UI/UX |
 
-✅ Aplicación funcional  
-✅ Firebase integrado  
-✅ IA funcional en móvil  
-✅ Mapa interactivo operativo  
-✅ Clasificación en tiempo real  
-✅ Responsive completo  
+</div>
 
 ---
 
-# 📄 Licencia
+# 📌 Project Status
 
-Proyecto académico — Todos los derechos reservados ©
+<div align="center">
+
+| Module | Status |
+|---|---|
+| Mobile Application | ✅ |
+| Firebase Integration | ✅ |
+| TensorFlow.js AI | ✅ |
+| Interactive Maps | ✅ |
+| Real-time Classification | ✅ |
+| Responsive UI | ✅ |
+| Android Compatibility | ✅ |
+
+</div>
 
 ---
+
+# 📄 License
+
+Academic Project — All Rights Reserved ©
+
+---
+
+<div align="center">
 
 # 🐦 BirdScope
 
-> “Tecnología e inteligencia artificial al servicio de la biodiversidad.”
+### Technology & Artificial Intelligence for Biodiversity Conservation
 
-## Uso compartido del sistema (Firebase)
+<br>
 
-BirdScope utiliza un único proyecto de Firebase como backend centralizado. Esto permite que múltiples integrantes del equipo puedan ejecutar la aplicación desde distintos dispositivos (PC o móvil) y trabajar sobre la misma base de datos en tiempo real.
+Developed with ❤️ using Ionic, Angular, Firebase & TensorFlow.js
 
-En este caso, la compañera de desarrollo puede utilizar la aplicación normalmente (captura de imágenes, clasificación con IA y geolocalización) y todos los registros generados se almacenan directamente en el mismo proyecto de Firebase, garantizando sincronización inmediata entre usuarios y entornos de desarrollo.
+<br>
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2C5364,50:71B280,100:134E5E&height=140&section=footer"/>
+
+</div>
