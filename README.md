@@ -434,7 +434,7 @@ Ibagué, Tolima — Colombia 🇨🇴
 | Integrante | Rol |
 |---|---|
 | Kevin Julian Guerrero Penagos | Backend • IA • Firebase |
-| Laura Sophia Zapata Coronado | Frontend • UI/UX |
+| Laura Sophia Zapata Coronado | Frontend • IA • UI/UX |
 
 </div>
 
