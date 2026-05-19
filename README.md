@@ -458,6 +458,196 @@ Ibagué, Tolima — Colombia 🇨🇴
 
 ---
 
+# 📌 Estado del Proyecto
+
+<div align="center">
+
+| Módulo | Estado |
+|---|---|
+| Aplicación móvil | ✅ |
+| Firebase integrado | ✅ |
+| IA TensorFlow.js | ✅ |
+| Mapas interactivos | ✅ |
+| Clasificación tiempo real | ✅ |
+| Responsive UI | ✅ |
+| Compatibilidad Android | ✅ |
+
+</div>
+
+---
+
+# 📱 Ejecución en Android (APK)
+
+BirdScope fue optimizado para ejecutarse directamente en dispositivos Android utilizando Capacitor y Android Studio, permitiendo probar la aplicación de forma nativa desde un celular físico conectado por USB.
+
+---
+
+## ⚙️ Requisitos Previos
+
+- Node.js
+- Ionic CLI
+- Android Studio
+- Java JDK
+- Capacitor
+- Dispositivo Android con:
+  - Depuración USB activada
+  - Modo desarrollador habilitado
+
+---
+
+# 🚀 Paso a Paso de Compilación Android
+
+## 1️⃣ Instalar dependencias
+
+```bash
+npm install --legacy-peer-deps
+```
+
+---
+
+## 2️⃣ Generar compilación web
+
+```bash
+ionic build
+```
+
+Esto genera automáticamente la carpeta:
+
+```txt
+www/
+```
+
+La cual contiene toda la aplicación optimizada para Android.
+
+---
+
+## 3️⃣ Instalar Capacitor Android
+
+```bash
+npm install @capacitor/android
+```
+
+---
+
+## 4️⃣ Agregar plataforma Android
+
+```bash
+npx cap add android
+```
+
+Esto crea automáticamente la carpeta:
+
+```txt
+android/
+```
+
+---
+
+## 5️⃣ Sincronizar proyecto
+
+```bash
+npx cap sync
+```
+
+Permite copiar:
+
+- assets
+- configuración
+- TensorFlow.js
+- Firebase
+- build web
+
+hacia el proyecto Android nativo.
+
+---
+
+## 6️⃣ Abrir Android Studio
+
+```bash
+npx cap open android
+```
+
+Android Studio abre automáticamente el proyecto nativo Android.
+
+---
+
+# 📲 Ejecución en Celular Físico
+
+## 7️⃣ Conectar dispositivo Android
+
+Se utilizó un celular físico conectado por USB verificando correctamente la conexión mediante:
+
+```bash
+adb devices
+```
+
+---
+
+## 8️⃣ Ejecutar aplicación
+
+Desde Android Studio:
+
+```txt
+▶️ Run App
+```
+
+La aplicación se instala directamente en el dispositivo Android físico como APK temporal de desarrollo.
+
+---
+
+# 🧠 Optimización TensorFlow.js en Android
+
+Durante las pruebas se identificó que la inferencia IA funciona mejor ejecutándose directamente como APK Android debido a:
+
+- ✅ Mejor acceso al hardware
+- ✅ Menor latencia de cámara
+- ✅ Mejor rendimiento TensorFlow.js
+- ✅ Mayor estabilidad móvil
+- ✅ Mejor integración con WebView/GPU
+
+Esto mejora significativamente:
+
+- clasificación de aves
+- captura de imágenes
+- inferencia IA
+- acceso a cámara
+- experiencia móvil
+
+---
+
+# 🔥 Tecnologías Integradas
+
+<div align="center">
+
+| Tecnología | Función |
+|---|---|
+| Ionic | Framework híbrido |
+| Angular | Frontend |
+| Capacitor | Integración Android |
+| TensorFlow.js | Inferencia IA |
+| Firebase | Backend |
+| Firestore | Base de datos |
+| Leaflet | Mapas interactivos |
+| OpenStreetMap | Geolocalización |
+| Android Studio | Compilación APK |
+
+</div>
+
+---
+
+# 📌 Resultado Final
+
+- ✅ Aplicación ejecutándose en Android físico
+- ✅ TensorFlow.js funcionando localmente
+- ✅ Firebase sincronizado en tiempo real
+- ✅ Cámara integrada operativa
+- ✅ Geolocalización habilitada
+- ✅ Compatibilidad móvil completa
+
+---
+
+---
+
 # 📄 Licencia
 
 Proyecto académico — Todos los derechos reservados ©

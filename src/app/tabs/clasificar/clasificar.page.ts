@@ -80,7 +80,7 @@ const UMBRAL_AUTO = 70;
   styleUrls: ['./clasificar.page.scss'],
   imports: [
     CommonModule,
-    FormsModule,        // ✅ necesario para [(ngModel)]
+    FormsModule, // ✅ necesario para [(ngModel)]
     IonHeader,
     IonToolbar,
     IonContent,
@@ -180,8 +180,8 @@ export class ClasificarPage implements OnInit {
         this.confirmada = false;
         this.aveConfirmada = null;
         this.autoConfirmada = false;
-        this.mostrarNinguna = false;   // ✅ reset
-        this.nombreManual = '';         // ✅ reset
+        this.mostrarNinguna = false; // ✅ reset
+        this.nombreManual = ''; // ✅ reset
         await this.pedirPermisoUbicacion();
         await this.clasificar(dataUrl);
       };
@@ -198,6 +198,7 @@ export class ClasificarPage implements OnInit {
     try {
       const img = await new Promise<HTMLImageElement>((resolve, reject) => {
         const image = new Image();
+        image.crossOrigin = 'anonymous';
         image.onload = () => resolve(image);
         image.onerror = reject;
         image.src = dataUrl;
@@ -205,14 +206,17 @@ export class ClasificarPage implements OnInit {
 
       await new Promise<void>((resolve) => setTimeout(resolve, 100));
 
-      const tensor = tf.tidy(() =>
-        tf.browser
-          .fromPixels(img)
-          .resizeNearestNeighbor([224, 224])
-          .toFloat()
-          .div(255.0)
-          .expandDims(0),
-      );
+      // Canvas intermedio — normaliza igual que Keras
+      const canvas = document.createElement('canvas');
+      canvas.width = 224;
+      canvas.height = 224;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(img, 0, 0, 224, 224);
+
+      const tensor = tf.tidy(() => {
+        const pixels = tf.browser.fromPixels(canvas, 3);
+        return pixels.toFloat().div(127.5).sub(1.0).expandDims(0);
+      });
 
       const prediccion = this.modelo!.predict(tensor) as tf.Tensor;
       const valores = await prediccion.data();
@@ -224,13 +228,14 @@ export class ClasificarPage implements OnInit {
       const indexados = arr.map((v, i) => ({ i, v }));
       indexados.sort((a, b) => b.v - a.v);
 
-      this.topResultados = indexados.slice(0, 3).map((item) => ({
-        especie: CLASES[item.i].replace(/_/g, ' '),
-        confianza: Math.round(item.v * 100),
-      }));
-
-      this.resultado = this.topResultados[0].especie;
-      this.confianza = this.topResultados[0].confianza;
+      this.ngZone.run(() => {
+        this.topResultados = indexados.slice(0, 3).map((item) => ({
+          especie: CLASES[item.i].replace(/_/g, ' '),
+          confianza: Math.round(item.v * 100),
+        }));
+        this.resultado = this.topResultados[0].especie;
+        this.confianza = this.topResultados[0].confianza;
+      });
 
       if (this.confianza >= UMBRAL_AUTO) {
         this.autoConfirmada = true;
@@ -243,11 +248,17 @@ export class ClasificarPage implements OnInit {
     } catch (e) {
       console.error('Error clasificando:', e);
     } finally {
-      this.cargando = false;
+      this.ngZone.run(() => {
+        this.cargando = false;
+      });
     }
   }
 
-  comprimirImagen(dataUrl: string, maxWidth = 400, quality = 0.6): Promise<string> {
+  comprimirImagen(
+    dataUrl: string,
+    maxWidth = 400,
+    quality = 0.6,
+  ): Promise<string> {
     return new Promise((resolve) => {
       const img = new Image();
       img.onload = () => {
