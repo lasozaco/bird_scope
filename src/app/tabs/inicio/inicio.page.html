@@ -18,6 +18,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="home-content">
+  <!-- 🔄 Pull to Refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
+    <ion-refresher-content
+      pullingText="Desliza para actualizar"
+      refreshingSpinner="crescent"
+      refreshingText="Actualizando..."
+    ></ion-refresher-content>
+  </ion-refresher>
   <div class="home">
     <!-- Hero -->
     <section class="welcome-card" aria-label="Bienvenida">

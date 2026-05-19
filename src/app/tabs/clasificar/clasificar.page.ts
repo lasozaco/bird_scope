@@ -12,6 +12,8 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonBadge,
+  IonRefresher,
+  IonRefresherContent,
 } from '@ionic/angular/standalone';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import * as tf from '@tensorflow/tfjs';
@@ -91,6 +93,8 @@ const UMBRAL_AUTO = 70;
     IonCardHeader,
     IonCardTitle,
     IonBadge,
+    IonRefresher,
+    IonRefresherContent,
   ],
 })
 export class ClasificarPage implements OnInit {
@@ -193,9 +197,13 @@ export class ClasificarPage implements OnInit {
 
   async clasificar(dataUrl: string) {
     if (!this.modelo) return;
+
     this.cargando = true;
 
     try {
+      // ================================
+      // 1️⃣ Cargar imagen correctamente
+      // ================================
       const img = await new Promise<HTMLImageElement>((resolve, reject) => {
         const image = new Image();
         image.crossOrigin = 'anonymous';
@@ -204,49 +212,104 @@ export class ClasificarPage implements OnInit {
         image.src = dataUrl;
       });
 
+      // pequeño delay necesario en Android
       await new Promise<void>((resolve) => setTimeout(resolve, 100));
 
-      // Canvas intermedio — normaliza igual que Keras
+      // ================================
+      // 2️⃣ Canvas FINAL (224x224)
+      // ================================
       const canvas = document.createElement('canvas');
       canvas.width = 224;
       canvas.height = 224;
-      const ctx = canvas.getContext('2d')!;
-      ctx.drawImage(img, 0, 0, 224, 224);
 
+      const ctx = canvas.getContext('2d')!;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      // ================================
+      // 3️⃣ Canvas INTERMEDIO (SOLUCIÓN ANDROID)
+      // ================================
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = img.naturalWidth || img.width;
+      tempCanvas.height = img.naturalHeight || img.height;
+
+      const tempCtx = tempCanvas.getContext('2d')!;
+      tempCtx.drawImage(img, 0, 0);
+
+      // Redimensionar correctamente
+      ctx.drawImage(
+        tempCanvas,
+        0,
+        0,
+        tempCanvas.width,
+        tempCanvas.height,
+        0,
+        0,
+        224,
+        224,
+      );
+
+      // ================================
+      // 4️⃣ Verificación anti-canvas negro
+      // ================================
+      const pixelCheck = ctx.getImageData(0, 0, 1, 1).data;
+      console.log('Pixel check:', pixelCheck);
+
+      if (pixelCheck[0] === 0 && pixelCheck[1] === 0 && pixelCheck[2] === 0) {
+        console.warn('⚠️ Canvas posiblemente vacío');
+      }
+
+      // ================================
+      // 5️⃣ Convertir a Tensor
+      // ================================
       const tensor = tf.tidy(() => {
         const pixels = tf.browser.fromPixels(canvas, 3);
+
         return pixels.toFloat().div(127.5).sub(1.0).expandDims(0);
       });
 
-      const prediccion = this.modelo!.predict(tensor) as tf.Tensor;
+      // ================================
+      // 6️⃣ Predicción
+      // ================================
+      const prediccion = this.modelo.predict(tensor) as tf.Tensor;
+
       const valores = await prediccion.data();
       const arr = Array.from(valores) as number[];
 
       prediccion.dispose();
       tensor.dispose();
 
+      // ================================
+      // 7️⃣ Ordenar resultados
+      // ================================
       const indexados = arr.map((v, i) => ({ i, v }));
       indexados.sort((a, b) => b.v - a.v);
 
+      // ================================
+      // 8️⃣ Mostrar resultados UI
+      // ================================
       this.ngZone.run(() => {
         this.topResultados = indexados.slice(0, 3).map((item) => ({
           especie: CLASES[item.i].replace(/_/g, ' '),
           confianza: Math.round(item.v * 100),
         }));
+
         this.resultado = this.topResultados[0].especie;
         this.confianza = this.topResultados[0].confianza;
       });
 
+      // ================================
+      // 9️⃣ Auto guardado si confianza alta
+      // ================================
       if (this.confianza >= UMBRAL_AUTO) {
         this.autoConfirmada = true;
         this.confirmada = true;
         this.aveConfirmada = this.resultado;
+
         await this.guardarEnFirebase(dataUrl, true);
-      } else {
-        await this.guardarEnFirebase(dataUrl, false);
       }
     } catch (e) {
-      console.error('Error clasificando:', e);
+      console.error('❌ Error clasificando:', e);
     } finally {
       this.ngZone.run(() => {
         this.cargando = false;
@@ -320,6 +383,7 @@ export class ClasificarPage implements OnInit {
     if (!this.aveSeleccionada) return;
     this.aveConfirmada = this.aveSeleccionada;
     this.confirmada = true;
+    await this.guardarEnFirebase(this.imagenPreview!, true);
 
     try {
       const coords = await this.obtenerUbicacion();
@@ -398,5 +462,23 @@ export class ClasificarPage implements OnInit {
         { timeout: 5000 },
       );
     });
+  }
+
+  // ============================
+  // 🔄 Resetear clasificación
+  // ============================
+  resetear() {
+    this.imagenPreview = null;
+    this.resultado = null;
+    this.confianza = 0;
+    this.topResultados = [];
+    this.cargando = false;
+    this.guardado = false;
+    this.aveSeleccionada = null;
+    this.confirmada = false;
+    this.aveConfirmada = null;
+    this.autoConfirmada = false;
+    this.mostrarNinguna = false;
+    this.nombreManual = '';
   }
 }

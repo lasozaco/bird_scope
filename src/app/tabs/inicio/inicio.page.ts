@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   inject,
   Injector,
   runInInjectionContext,
@@ -14,6 +13,8 @@ import {
   IonHeader,
   IonIcon,
   IonToolbar,
+  IonRefresher,
+  IonRefresherContent,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -37,17 +38,19 @@ import { Firestore, collection, getDocs } from '@angular/fire/firestore';
     IonContent,
     IonButton,
     IonIcon,
+    IonRefresher,
+    IonRefresherContent,
   ],
 })
-export class InicioPage implements OnInit {
+export class InicioPage {
   private firestore = inject(Firestore);
-  private router    = inject(Router);
-  private injector  = inject(Injector);
-  private ngZone    = inject(NgZone);
+  private router = inject(Router);
+  private injector = inject(Injector);
+  private ngZone = inject(NgZone);
 
   totalObservaciones = 0;
-  totalEspecies      = 0;
-  cargando           = true;
+  totalEspecies = 0;
+  cargando = true;
 
   especiesDestacadas: { nombre: string; latin: string; imagen?: string }[] = [];
 
@@ -55,7 +58,7 @@ export class InicioPage implements OnInit {
     addIcons({ cameraOutline, leafOutline, locationOutline, barChartOutline });
   }
 
-  ngOnInit() {
+  ionViewWillEnter() {
     runInInjectionContext(this.injector, () => {
       this.cargarEstadisticas();
     });
@@ -63,21 +66,24 @@ export class InicioPage implements OnInit {
 
   async cargarEstadisticas() {
     try {
-      const col  = collection(this.firestore, 'avistamientos');
+      const col = collection(this.firestore, 'avistamientos');
       const snap = await getDocs(col);
-      const data = snap.docs.map(d => d.data() as any);
+      const data = snap.docs.map((d) => d.data() as any);
 
       this.ngZone.run(() => {
         this.totalObservaciones = data.length;
 
-        const mapaEspecies = new Map<string, { latin: string; imagen?: string }>();
-        data.forEach(d => {
+        const mapaEspecies = new Map<
+          string,
+          { latin: string; imagen?: string }
+        >();
+        data.forEach((d) => {
           if (!d['especie']) return;
-          const nombre   = d['especie'] as string;
+          const nombre = d['especie'] as string;
           const existing = mapaEspecies.get(nombre);
           if (!existing || (!existing.imagen && d['imagen'])) {
             mapaEspecies.set(nombre, {
-              latin:  d['nombreCientifico'] ?? '',
+              latin: d['nombreCientifico'] ?? '',
               imagen: d['imagen'] ?? undefined,
             });
           }
@@ -99,5 +105,17 @@ export class InicioPage implements OnInit {
 
   irAClasificar() {
     this.router.navigate(['/tabs/clasificar']);
+  }
+  // 🔄 Pull To Refresh
+  recargar(event: any) {
+    console.log('Refrescando inicio...');
+
+    // vuelve a cargar estadísticas sin cerrar app
+    this.cargando = true;
+    this.cargarEstadisticas();
+
+    setTimeout(() => {
+      event.target.complete(); // quita animación
+    }, 1000);
   }
 }

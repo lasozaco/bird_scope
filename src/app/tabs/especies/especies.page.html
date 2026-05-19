@@ -18,6 +18,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="page-content">
+ <!-- // ✅ DESLIZAR PARA ACTUALIZAR -->
+<ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
+  <ion-refresher-content
+    pullingText="Desliza para actualizar"
+    refreshingSpinner="crescent"
+    refreshingText="Actualizando especies..."
+  ></ion-refresher-content>
+</ion-refresher>
   <div class="page">
     <ion-searchbar
       class="species-search"

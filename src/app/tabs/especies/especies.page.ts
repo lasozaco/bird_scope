@@ -24,6 +24,8 @@ import {
   IonSelect,
   IonSelectOption,
   IonToolbar,
+  IonRefresher,
+  IonRefresherContent,
 } from '@ionic/angular/standalone';
 
 // =======================================================
@@ -65,6 +67,8 @@ export interface Species {
     IonSearchbar,
     IonSelect,
     IonSelectOption,
+    IonRefresher,
+    IonRefresherContent,
   ],
 })
 export class EspeciesPage implements OnInit {
@@ -541,12 +545,30 @@ export class EspeciesPage implements OnInit {
         const espLower = esp.toLowerCase();
 
         // Busca qué ave del array coincide con este avistamiento
-        const match = this.allSpecies.find(
-          (s) =>
-            espLower.includes(s.commonName.toLowerCase()) ||
-            espLower.includes(s.scientificName.toLowerCase()) ||
-            s.commonName.toLowerCase().includes(espLower),
-        );
+        // DESPUÉS
+        const espNormalizado = esp
+          .toLowerCase()
+          .replace(/_/g, ' ')
+          .replace(/-/g, ' ')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '');
+
+        const match = this.allSpecies.find((s) => {
+          const nombre = s.commonName
+            .toLowerCase()
+            .replace(/-/g, ' ')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+          const cientifico = s.scientificName
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+          return (
+            espNormalizado.includes(nombre) ||
+            nombre.includes(espNormalizado) ||
+            espNormalizado.includes(cientifico)
+          );
+        });
 
         const key = match ? match.commonName.toLowerCase() : espLower;
         this.detectedSpecies.add(key);
@@ -604,5 +626,54 @@ export class EspeciesPage implements OnInit {
   onSortChange(ev: CustomEvent<{ value: string }>): void {
     const v = ev.detail.value;
     this.sortBy.set(v === 'scientific' ? 'scientific' : 'name');
+  }
+  // ============================
+// 🔥 Cargar especies detectadas desde Firestore
+// ============================
+async cargarEspeciesDetectadas() {
+  console.log('Leyendo especies detectadas...');
+
+  const ref = collection(this.firestore, 'detecciones');
+  const snapshot = await getDocs(ref);
+
+  const nuevasDetectadas = new Set<string>();
+  const mapaImagenes = new Map<string, string[]>();
+
+  snapshot.forEach(doc => {
+    const data: any = doc.data();
+
+    const nombre = data.commonName?.toLowerCase();
+    const imagen = data.imagen;
+
+    if (!nombre) return;
+
+    nuevasDetectadas.add(nombre);
+
+    if (!mapaImagenes.has(nombre)) {
+      mapaImagenes.set(nombre, []);
+    }
+
+    if (imagen) {
+      mapaImagenes.get(nombre)!.push(imagen);
+    }
+  });
+
+  this.detectedSpecies = nuevasDetectadas;
+  this.detectedImages.set(mapaImagenes);
+
+  console.log('✅ Especies actualizadas');
+}
+  // 🔄 Pull To Refresh
+  recargar(event: any) {
+    console.log('Actualizando especies...');
+
+    runInInjectionContext(this.injector, async () => {
+      await this.cargarEspeciesDetectadas(); // vuelve a leer firestore
+      this.shuffleChips(); // refresca recomendaciones
+
+      setTimeout(() => {
+        event.target.complete(); // quita animación
+      }, 900);
+    });
   }
 }

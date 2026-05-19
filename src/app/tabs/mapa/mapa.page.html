@@ -1,173 +1,183 @@
 <ion-header class="page-header" [translucent]="true">
   <ion-toolbar>
     <div class="brand" slot="start">
-      <div class="brand__logo" aria-hidden="true">
-        <img class="brand__img" src="assets/brand-logo.png" alt="BirdScope" />
+      <div class="brand__logo">
+        <img class="brand__img" src="assets/brand-logo.png" />
       </div>
       <div class="brand__text">
-        <div class="brand__title">
-          <img
-            class="brand__wordmark"
-            src="assets/brand-wordmark.png"
-            alt="BirdScope"
-          />
-        </div>
+        <img class="brand__wordmark" src="assets/brand-wordmark.png" />
       </div>
     </div>
   </ion-toolbar>
 </ion-header>
 
+<!-- ✅ EL CONTENT DEBE SER EL PADRE -->
 <ion-content [fullscreen]="true" class="page-content">
+
+  <!-- ✅ REFRESHER -->
+  <ion-refresher slot="fixed" (ionRefresh)="resetearPagina($event)">
+    <ion-refresher-content
+      pullingText="Desliza para actualizar"
+      refreshingSpinner="crescent"
+      refreshingText="Actualizando mapa..."
+    ></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- ✅ TODO VA DENTRO -->
   <div class="page">
-    <section class="stats">
-      <div class="stat-card">
-        <div class="stat-card__value">{{ totalObservaciones }}</div>
-        <div class="stat-card__label">Total Observaciones</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card__value stat-card__value--gold">
-          {{ conUbicacion }}
-        </div>
-        <div class="stat-card__label">Con Ubicación GPS</div>
-      </div>
-    </section>
+        <section class="stats">
+          <div class="stat-card">
+            <div class="stat-card__value">{{ totalObservaciones }}</div>
+            <div class="stat-card__label">Total Observaciones</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__value stat-card__value--gold">
+              {{ conUbicacion }}
+            </div>
+            <div class="stat-card__label">Con Ubicación GPS</div>
+          </div>
+        </section>
 
-    <!-- BUSCADOR -->
-    <div class="buscador-wrapper">
-      <ion-searchbar
-        [(ngModel)]="busqueda"
-        (ionInput)="onBusquedaInput($event)"
-        placeholder="Buscar ave en el mapa..."
-        [showClearButton]="'focus'"
-        class="buscador"
-      ></ion-searchbar>
+        <!-- BUSCADOR -->
+        <div class="buscador-wrapper">
+          <ion-searchbar
+            [(ngModel)]="busqueda"
+            (ionInput)="onBusquedaInput($event)"
+            placeholder="Buscar ave en el mapa..."
+            [showClearButton]="'focus'"
+            class="buscador"
+          ></ion-searchbar>
 
-      <!-- Sugerencias -->
-      <div class="sugerencias" *ngIf="mostrarSugerencias">
-        <div
-          class="sugerencia-item"
-          *ngFor="let s of sugerencias"
-          (click)="seleccionarEspecie(s)"
-        >
-          🐦 {{ s }}
-        </div>
-        <div class="sugerencia-vacia" *ngIf="sugerencias.length === 0">
-          ❌ No encontrada aún — ¡intenta clasificarla!
-        </div>
-      </div>
+          <!-- Sugerencias -->
+          <div class="sugerencias" *ngIf="mostrarSugerencias">
+            <div
+              class="sugerencia-item"
+              *ngFor="let s of sugerencias"
+              (click)="seleccionarEspecie(s)"
+            >
+              🐦 {{ s }}
+            </div>
+            <div class="sugerencia-vacia" *ngIf="sugerencias.length === 0">
+              ❌ No encontrada aún — ¡intenta clasificarla!
+            </div>
+          </div>
 
-      <!-- Recomendaciones -->
-      <div
-        class="recomendaciones"
-        *ngIf="
+          <!-- Recomendaciones -->
+          <div
+            class="recomendaciones"
+            *ngIf="
         viewMode() === 'mapa' &&
         !mostrarSugerencias &&
         busqueda.trim().length === 0 &&
         recomendaciones.length > 0
         "
-      >
-        <p class="recomendaciones__titulo">
-          🌟 Aves registradas — toca para ubicar:
-        </p>
-        <div class="recomendaciones__chips">
-          <span
-            class="chip"
-            *ngFor="let r of recomendaciones"
-            (click)="seleccionarEspecie(r)"
           >
-            {{ r }}
-          </span>
-          <span
-            class="chip chip--refresh"
-            (click)="generarRecomendaciones()"
-            title="Otras especies"
-          >
-            🔀
-          </span>
-        </div>
-      </div>
-
-      <!-- Resultado -->
-      <div class="resultado-busqueda" *ngIf="resultadoBusqueda">
-        ✅ Mostrando: <strong>{{ resultadoBusqueda }}</strong>
-      </div>
-      <div class="no-encontrada" *ngIf="noEncontrada">
-        ❌ Esta ave aún no ha sido registrada.
-        <a [routerLink]="['/tabs/clasificar']">¡Clasifícala!</a>
-      </div>
-    </div>
-
-    <div class="mode-toggle">
-      <button
-        type="button"
-        class="mode-toggle__btn"
-        [class.is-active]="viewMode() === 'mapa'"
-        (click)="cambiarVista('mapa')"
-      >
-        <ion-icon name="map-outline"></ion-icon>
-        Mapa
-      </button>
-      <button
-        type="button"
-        class="mode-toggle__btn"
-        [class.is-active]="viewMode() === 'lista'"
-        (click)="cambiarVista('lista')"
-      >
-        <ion-icon name="list-outline"></ion-icon>
-        Lista
-      </button>
-    </div>
-
-    @if (viewMode() === 'mapa') {
-    <section class="map-shell">
-      <div id="leaflet-map" style="width: 100%; height: 100%"></div>
-    </section>
-    } @else {
-    <ng-container *ngIf="avistamientosPorEspecie.length > 0; else sinDatos">
-      <div class="grupos-lista">
-        <div class="grupo" *ngFor="let g of avistamientosPorEspecie">
-          <div class="grupo__header" [style.border-left-color]="g.color">
-            <span class="dot" [style.background]="g.color"></span>
-            <span class="grupo__nombre">{{ g.especie }}</span>
-            <span class="grupo__count">{{ g.items.length }}</span>
-          </div>
-          <div class="avistamiento-item" *ngFor="let a of g.items">
-            <div class="avistamiento-item__img" *ngIf="a.imagen">
-              <img [src]="a.imagen" alt="Ave" />
-            </div>
-            <div class="avistamiento-item__info">
-              <div class="avistamiento-item__confianza" [style.color]="g.color">
-                {{ a.confianza }}% confianza
-              </div>
-              <div class="avistamiento-item__fecha">
-                {{ a.fecha | date:'dd/MM/yyyy HH:mm' }}
-              </div>
-              <div class="avistamiento-item__gps" *ngIf="a.latitud">
-                📍 {{ a.latitud | number:'1.4-4' }}, {{ a.longitud |
-                number:'1.4-4' }}
-              </div>
+            <p class="recomendaciones__titulo">
+              🌟 Aves registradas — toca para ubicar:
+            </p>
+            <div class="recomendaciones__chips">
+              <span
+                class="chip"
+                *ngFor="let r of recomendaciones"
+                (click)="seleccionarEspecie(r)"
+              >
+                {{ r }}
+              </span>
+              <span
+                class="chip chip--refresh"
+                (click)="generarRecomendaciones()"
+                title="Otras especies"
+              >
+                🔀
+              </span>
             </div>
           </div>
-        </div>
-      </div>
-    </ng-container>
 
-    <ng-template #sinDatos>
-      <section class="empty-card">
-        <div class="empty-card__inner">
-          <div class="empty-card__icon">
-            <ion-icon name="leaf-outline"></ion-icon>
+          <!-- Resultado -->
+          <div class="resultado-busqueda" *ngIf="resultadoBusqueda">
+            ✅ Mostrando: <strong>{{ resultadoBusqueda }}</strong>
           </div>
-          <div class="empty-card__title">Sin observaciones</div>
-          <div class="empty-card__subtitle">
-            Clasifica aves para ver tu historial aquí
+          <div class="no-encontrada" *ngIf="noEncontrada">
+            ❌ Esta ave aún no ha sido registrada.
+            <a [routerLink]="['/tabs/clasificar']">¡Clasifícala!</a>
           </div>
-          <ion-button [routerLink]="['/tabs/clasificar']" fill="solid">
-            Clasificar Ave
-          </ion-button>
         </div>
-      </section>
-    </ng-template>
-    }
-  </div>
-</ion-content>
+
+        <div class="mode-toggle">
+          <button
+            type="button"
+            class="mode-toggle__btn"
+            [class.is-active]="viewMode() === 'mapa'"
+            (click)="cambiarVista('mapa')"
+          >
+            <ion-icon name="map-outline"></ion-icon>
+            Mapa
+          </button>
+          <button
+            type="button"
+            class="mode-toggle__btn"
+            [class.is-active]="viewMode() === 'lista'"
+            (click)="cambiarVista('lista')"
+          >
+            <ion-icon name="list-outline"></ion-icon>
+            Lista
+          </button>
+        </div>
+
+        @if (viewMode() === 'mapa') {
+        <section class="map-shell">
+          <div id="leaflet-map" style="width: 100%; height: 100%"></div>
+        </section>
+        } @else {
+        <ng-container *ngIf="avistamientosPorEspecie.length > 0; else sinDatos">
+          <div class="grupos-lista">
+            <div class="grupo" *ngFor="let g of avistamientosPorEspecie">
+              <div class="grupo__header" [style.border-left-color]="g.color">
+                <span class="dot" [style.background]="g.color"></span>
+                <span class="grupo__nombre">{{ g.especie }}</span>
+                <span class="grupo__count">{{ g.items.length }}</span>
+              </div>
+              <div class="avistamiento-item" *ngFor="let a of g.items">
+                <div class="avistamiento-item__img" *ngIf="a.imagen">
+                  <img [src]="a.imagen" alt="Ave" />
+                </div>
+                <div class="avistamiento-item__info">
+                  <div
+                    class="avistamiento-item__confianza"
+                    [style.color]="g.color"
+                  >
+                    {{ a.confianza }}% confianza
+                  </div>
+                  <div class="avistamiento-item__fecha">
+                    {{ a.fecha | date:'dd/MM/yyyy HH:mm' }}
+                  </div>
+                  <div class="avistamiento-item__gps" *ngIf="a.latitud">
+                    📍 {{ a.latitud | number:'1.4-4' }}, {{ a.longitud |
+                    number:'1.4-4' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #sinDatos>
+          <section class="empty-card">
+            <div class="empty-card__inner">
+              <div class="empty-card__icon">
+                <ion-icon name="leaf-outline"></ion-icon>
+              </div>
+              <div class="empty-card__title">Sin observaciones</div>
+              <div class="empty-card__subtitle">
+                Clasifica aves para ver tu historial aquí
+              </div>
+              <ion-button [routerLink]="['/tabs/clasificar']" fill="solid">
+                Clasificar Ave
+              </ion-button>
+            </div>
+          </section>
+        </ng-template>
+        }
+      </div>
+    </ion-content>
+>

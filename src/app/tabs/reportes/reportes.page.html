@@ -6,7 +6,11 @@
       </div>
       <div class="brand__text">
         <div class="brand__title">
-          <img class="brand__wordmark" src="assets/brand-wordmark.png" alt="BirdScope" />
+          <img
+            class="brand__wordmark"
+            src="assets/brand-wordmark.png"
+            alt="BirdScope"
+          />
         </div>
       </div>
     </div>
@@ -14,8 +18,15 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="page-content">
+  <!-- 🔥 AGREGAR ESTO -->
+  <ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
+    <ion-refresher-content
+      pullingText="Desliza para actualizar"
+      refreshingSpinner="crescent"
+      refreshingText="Actualizando reportes..."
+    ></ion-refresher-content>
+  </ion-refresher>
   <div class="page">
-
     <section class="metrics" aria-label="Métricas">
       <div class="metric-card">
         <div class="metric-card__icon metric-card__icon--green">
@@ -53,19 +64,26 @@
         Progreso de Colección
       </div>
       <div class="progress-card__row">
-        <div class="progress-card__left">{{ especiesUnicas }} de 41 especies</div>
+        <div class="progress-card__left">
+          {{ especiesUnicas }} de 41 especies
+        </div>
         <div class="progress-card__right">{{ progreso }}%</div>
       </div>
       <div class="progress-bar">
         <div class="progress-bar__fill" [style.width.%]="progreso"></div>
       </div>
-      <div class="progress-card__hint">Te faltan {{ faltantes }} especies por registrar</div>
+      <div class="progress-card__hint">
+        Te faltan {{ faltantes }} especies por registrar
+      </div>
     </section>
 
     <ng-container *ngIf="hayDatos; else sinDatos">
       <section class="historial">
         <h2 class="historial__title">Últimos Avistamientos</h2>
-        <div class="avistamiento-card" *ngFor="let a of avistamientos.slice(0, 10)">
+        <div
+          class="avistamiento-card"
+          *ngFor="let a of avistamientos.slice(0, 10)"
+        >
           <div class="avistamiento-card__img" *ngIf="a.imagen">
             <img [src]="a.imagen" alt="Ave" />
           </div>
@@ -78,7 +96,8 @@
               </span>
             </div>
             <div class="avistamiento-card__gps" *ngIf="a.latitud">
-              📍 {{ a.latitud | number:'1.4-4' }}, {{ a.longitud | number:'1.4-4' }}
+              📍 {{ a.latitud | number:'1.4-4' }}, {{ a.longitud |
+              number:'1.4-4' }}
             </div>
           </div>
         </div>
@@ -105,9 +124,9 @@
     <section class="about-card">
       <h2 class="about-card__title">Sobre los Reportes</h2>
       <p class="about-card__text">
-        Esta sección muestra un resumen de todas tus observaciones guardadas en Firebase.
+        Esta sección muestra un resumen de todas tus observaciones guardadas en
+        Firebase.
       </p>
     </section>
-
   </div>
 </ion-content>

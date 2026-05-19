@@ -18,6 +18,18 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="page-content">
+  <!-- ✅ DESLIZAR PARA RESETEAR -->
+  <ion-refresher
+    slot="fixed"
+    (ionRefresh)="resetear(); $event.target.complete()"
+  >
+    <ion-refresher-content
+      pullingText="Desliza para reiniciar"
+      refreshingSpinner="circles"
+      refreshingText="Reiniciando..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
   <div class="page">
     <section class="capture-card" aria-label="Capturar o cargar imagen">
       <div class="capture-card__inner">
@@ -80,7 +92,6 @@
         <ion-card-title>Aves Posibles 🐦</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-
         <!-- Las 3 opciones con barras -->
         <div
           *ngFor="let r of topResultados; let i = index"
@@ -155,7 +166,11 @@
 
           <!-- ❌ NINGUNA (solo si confianza < 45%) -->
           <div class="ninguna-section" *ngIf="confianza < 45">
-            <ion-button class="btn-ninguna" fill="clear" (click)="toggleNinguna()">
+            <ion-button
+              class="btn-ninguna"
+              fill="clear"
+              (click)="toggleNinguna()"
+            >
               <ion-icon slot="start" name="close-outline"></ion-icon>
               Ninguna es correcta
             </ion-button>
@@ -177,7 +192,6 @@
               </ion-button>
             </div>
           </div>
-
         </div>
 
         <!-- ✅ CONFIRMADA MANUALMENTE -->
@@ -195,9 +209,18 @@
             Ver más sobre esta ave
           </ion-button>
         </div>
-
       </ion-card-content>
     </ion-card>
+    <ion-button
+      expand="block"
+      fill="outline"
+      class="btn-reset"
+      *ngIf="confirmada"
+      (click)="resetear()"
+    >
+      <ion-icon slot="start" name="camera-outline"></ion-icon>
+      Clasificar otra ave
+    </ion-button>
 
     <section class="tips-card" aria-label="Consejos" *ngIf="!imagenPreview">
       <h2 class="tips-card__title">Consejos para una mejor identificación</h2>
@@ -208,6 +231,5 @@
         <li>Incluye características distintivas como plumaje y pico</li>
       </ul>
     </section>
-
   </div>
 </ion-content>

@@ -16,6 +16,8 @@ import {
   IonIcon,
   IonToolbar,
   IonSearchbar,
+  IonRefresher, // 🔥 agregar
+  IonRefresherContent, // 🔥 agregar
 } from '@ionic/angular/standalone';
 import { Firestore, collection, getDocs } from '@angular/fire/firestore';
 import * as L from 'leaflet';
@@ -35,6 +37,8 @@ import * as L from 'leaflet';
     IonIcon,
     IonButton,
     IonSearchbar,
+    IonRefresher, // 🔥
+    IonRefresherContent, // 🔥
   ],
 })
 export class MapaPage implements OnInit, OnDestroy {
@@ -351,6 +355,33 @@ export class MapaPage implements OnInit, OnDestroy {
       if (el) el.innerHTML = '';
       this.mapa = null;
       setTimeout(() => this.iniciarMapa(), 400);
+    }
+  }
+  // ✅ REFRESCAR PÁGINA COMPLETA
+  async resetearPagina(event?: any) {
+    console.log('🔄 Actualizando mapa...');
+
+    // limpiar búsqueda
+    this.busqueda = '';
+    this.sugerencias = [];
+    this.mostrarSugerencias = false;
+    this.resultadoBusqueda = null;
+    this.noEncontrada = false;
+
+    // destruir mapa actual
+    this.destruirMapa();
+
+    // volver a cargar datos
+    await this.cargarDatos();
+
+    // reiniciar mapa
+    setTimeout(() => {
+      this.iniciarMapa();
+    }, 400);
+
+    // finalizar animación refresher
+    if (event) {
+      event.target.complete();
     }
   }
 }
