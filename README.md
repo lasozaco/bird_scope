@@ -658,7 +658,36 @@ Esto mejora significativamente:
 | 📊 Reportes | Desliza hacia abajo | Refresca historial completo y métricas |
 
 > 💡 Ninguna de estas acciones requiere cerrar la app ni cambiar de pestaña — todo se actualiza directamente en la vista activa..
+---
+# 📥 Descarga APK
 
+La aplicación Android compilada se encuentra disponible dentro del proyecto en la siguiente ruta:
+
+```txt
+apk/app-debug.apk
+```
+
+El APK permite instalar y ejecutar BirdScope directamente en dispositivos Android para realizar:
+
+- reconocimiento inteligente de aves
+- clasificación IA con TensorFlow.js
+- visualización de mapas interactivos
+- sincronización Firebase en tiempo real
+- pruebas móviles nativas
+
+---
+
+# 📸 Evidencias del Proyecto
+
+El repositorio incluye:
+
+- código fuente completo
+- configuración Android Capacitor
+- modelo IA TensorFlow.js
+- README técnico
+- APK funcional
+- integración Firebase
+- estructura modular Ionic + Angular
 ---
 
 # 📄 Licencia
