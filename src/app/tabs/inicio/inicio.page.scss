@@ -219,13 +219,17 @@
 }
 
 .action-card {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 16px;
   padding: 18px 16px;
   text-decoration: none;
   box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
+  min-height: 140px; // ✅ altura uniforme
+  justify-content: center;
 }
 
 .action-card__icon {
@@ -234,8 +238,9 @@
   border-radius: 999px;
   display: grid;
   place-items: center;
-  margin: 6px auto 14px;
+  margin: 0 auto 12px; // ✅ margen consistente
   color: #ffffff;
+  flex-shrink: 0;
 }
 
 .action-card__icon ion-icon {
@@ -274,13 +279,17 @@
 }
 
 .tool-card {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 18px;
   padding: 20px 18px 18px;
   text-decoration: none;
   box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
+  min-height: 160px; // ✅ altura uniforme
+  justify-content: center;
 }
 
 .tool-card__icon {
@@ -289,8 +298,9 @@
   border-radius: 999px;
   display: grid;
   place-items: center;
-  margin: 6px auto 16px;
+  margin: 0 auto 14px; // ✅ margen consistente
   color: #ffffff;
+  flex-shrink: 0;
 }
 
 .tool-card__icon ion-icon {
@@ -309,16 +319,16 @@
   text-align: center;
   font-family: var(--serif);
   font-weight: 900;
-  font-size: 22px;
+  font-size: 20px; // ✅ bajé un poco para que quepa
   color: #111827;
-  line-height: 1.1;
+  line-height: 1.2;
 }
 
 .tool-card__subtitle {
-  margin-top: 10px;
+  margin-top: 8px;
   text-align: center;
   font-family: var(--serif);
-  font-size: 16px;
+  font-size: 14px;
   color: #6b7280;
 }
 

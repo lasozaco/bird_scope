@@ -695,6 +695,205 @@ El repositorio incluye:
 Proyecto académico — Todos los derechos reservados ©
 
 ---
+---
+
+# 📚 Librerías y Dependencias Principales
+
+BirdScope integra múltiples librerías modernas para permitir el funcionamiento de Inteligencia Artificial, geolocalización, mapas interactivos y capacidades móviles híbridas.
+
+---
+
+## 🧪 Dependencias Frontend
+
+```bash
+npm install @ionic/angular
+npm install @angular/core
+npm install rxjs
+```
+
+### Función
+
+- Construcción interfaz móvil
+- Componentes UI
+- Navegación Angular
+- Arquitectura SPA
+
+---
+
+## 🧠 TensorFlow.js (IA)
+
+```bash
+npm install @tensorflow/tfjs
+npm install @tensorflow/tfjs-backend-webgl
+npm install @tensorflow/tfjs-converter
+```
+
+### Función
+
+- Carga del modelo IA
+- Inferencia local móvil
+- Clasificación de aves
+- Optimización GPU/WebGL
+
+---
+
+## ☁️ Firebase
+
+```bash
+npm install firebase
+npm install @angular/fire
+```
+
+### Función
+
+- Firestore tiempo real
+- Storage imágenes
+- Backend compartido
+- Sincronización nube
+
+---
+
+## 🗺️ Leaflet + OpenStreetMap
+
+```bash
+npm install leaflet
+npm install @types/leaflet --save-dev
+```
+
+### Función
+
+- Mapas interactivos
+- Marcadores GPS
+- Visualización geográfica
+- Avistamientos en tiempo real
+
+---
+
+## 📱 Capacitor Android
+
+```bash
+npm install @capacitor/core
+npm install @capacitor/cli
+npm install @capacitor/android
+```
+
+### Función
+
+- Compilación APK Android
+- Acceso hardware móvil
+- Integración nativa
+- Ejecución en celular físico
+
+---
+
+## 📷 Plugins Nativos
+
+```bash
+npm install @capacitor/camera
+npm install @capacitor/geolocation
+npm install @capacitor/filesystem
+npm install @capacitor/status-bar
+```
+
+### Función
+
+- Captura cámara
+- GPS dispositivo
+- Manejo archivos
+- Integración Android
+
+---
+
+# 🚀 Instalación Completa Paso a Paso
+
+## 1️⃣ Clonar repositorio
+
+```bash
+git clone https://github.com/lasozaco/bird_scope.git
+```
+
+---
+
+## 2️⃣ Entrar al proyecto
+
+```bash
+cd bird_scope
+```
+
+---
+
+## 3️⃣ Instalar dependencias
+
+```bash
+npm install --legacy-peer-deps
+```
+
+---
+
+## 4️⃣ Ejecutar proyecto web
+
+```bash
+ionic serve
+```
+
+---
+
+## 5️⃣ Generar compilación Android
+
+```bash
+ionic build
+```
+
+---
+
+## 6️⃣ Sincronizar Capacitor
+
+```bash
+npx cap sync android
+```
+
+---
+
+## 7️⃣ Abrir Android Studio
+
+```bash
+npx cap open android
+```
+
+---
+
+## 8️⃣ Generar APK
+
+Desde Android Studio:
+
+```txt
+Build
+→ Generate App Bundles or APKs
+→ Generate APKs
+```
+
+---
+
+## 9️⃣ Ruta APK generado
+
+```txt
+android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+---
+
+# ✅ Resultado Final
+
+- APK Android funcional
+- TensorFlow.js operativo
+- Firebase conectado
+- Cámara integrada
+- GPS habilitado
+- Clasificación IA en tiempo real
+- Compatibilidad Android completa
+
+---
+---
 
 <div align="center">
 
