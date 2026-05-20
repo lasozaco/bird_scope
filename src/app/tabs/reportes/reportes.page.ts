@@ -1,4 +1,11 @@
-import { Component, OnInit, inject, NgZone } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  NgZone,
+  Injector,
+  runInInjectionContext,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
@@ -32,6 +39,7 @@ import { Firestore, collection, getDocs } from '@angular/fire/firestore';
 export class ReportesPage implements OnInit {
   private firestore = inject(Firestore);
   private ngZone = inject(NgZone);
+  private injector = inject(Injector); 
 
   totalObservaciones = 0;
   especiesUnicas = 0;
@@ -48,6 +56,7 @@ export class ReportesPage implements OnInit {
 
   async cargarDatos() {
     try {
+      await runInInjectionContext(this.injector, async () => {
       const col = collection(this.firestore, 'avistamientos');
       const snapshot = await getDocs(col);
       const data = snapshot.docs.map((doc) => doc.data());
@@ -75,6 +84,7 @@ export class ReportesPage implements OnInit {
         this.progreso = Math.round((this.especiesUnicas / 41) * 100);
         this.faltantes = 41 - this.especiesUnicas;
         this.hayDatos = data.length > 0;
+              });
       });
     } catch (e) {
       console.error('Error cargando datos:', e);

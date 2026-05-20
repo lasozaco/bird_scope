@@ -5,6 +5,8 @@ import {
   inject,
   NgZone,
   signal,
+  Injector, // ← agregar
+  runInInjectionContext, // ← agregar
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -17,7 +19,7 @@ import {
   IonToolbar,
   IonSearchbar,
   IonRefresher, // 🔥 agregar
-  IonRefresherContent, // 🔥 agregar
+  IonRefresherContent, // 🔥 
 } from '@ionic/angular/standalone';
 import { Firestore, collection, getDocs } from '@angular/fire/firestore';
 import * as L from 'leaflet';
@@ -44,6 +46,7 @@ import * as L from 'leaflet';
 export class MapaPage implements OnInit, OnDestroy {
   private firestore = inject(Firestore);
   private ngZone = inject(NgZone);
+  private injector = inject(Injector);
 
   readonly viewMode = signal<'mapa' | 'lista'>('mapa');
 
@@ -109,18 +112,20 @@ export class MapaPage implements OnInit, OnDestroy {
 
   async cargarDatos() {
     try {
-      const col = collection(this.firestore, 'avistamientos');
-      const snapshot = await getDocs(col);
-      const data = snapshot.docs.map((doc) => doc.data());
+      await runInInjectionContext(this.injector, async () => {
+        const col = collection(this.firestore, 'avistamientos');
+        const snapshot = await getDocs(col);
+        const data = snapshot.docs.map((doc) => doc.data());
 
-      this.ngZone.run(() => {
-        this.avistamientos = data;
-        this.totalObservaciones = data.length;
-        this.conUbicacion = data.filter(
-          (d: any) => d['latitud'] !== null && d['latitud'] !== undefined,
-        ).length;
-        this.agruparPorEspecie(data);
-        this.generarRecomendaciones();
+        this.ngZone.run(() => {
+          this.avistamientos = data;
+          this.totalObservaciones = data.length;
+          this.conUbicacion = data.filter(
+            (d: any) => d['latitud'] !== null && d['latitud'] !== undefined,
+          ).length;
+          this.agruparPorEspecie(data);
+          this.generarRecomendaciones();
+        });
       });
     } catch (e) {
       console.error('Error:', e);
@@ -251,7 +256,7 @@ export class MapaPage implements OnInit, OnDestroy {
             <div style="text-align:center;min-width:160px;">
               ${a.imagen ? `<img src="${a.imagen}" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-bottom:6px;"/>` : ''}
               <strong>🐦 ${a.especie}</strong><br/>
-              <span style="color:${grupo.color};font-weight:bold;">${a.confianza}% confianza</span><br/>
+              <span style="color:${grupo.color};font-weight:bold;">${a.confianza || a.confianzaModelo || 0}% confianza</span><br/>
               <small>${new Date(a.fecha).toLocaleDateString('es-CO')}</small>
             </div>
           `,
@@ -318,8 +323,8 @@ export class MapaPage implements OnInit, OnDestroy {
             iconAnchor: [14, 36],
             popupAnchor: [0, -36],
           });
-
-          const confianza = a['confianza'] || 0;
+          // Información del popup (agregar imagen, confianza, fecha)
+          const confianza = a['confianza'] || a['confianzaModelo'] || 0;
           const fecha = new Date(a['fecha']).toLocaleDateString('es-CO');
           const imgHtml = a['imagen']
             ? `<img src="${a['imagen']}" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-bottom:6px;"/>`

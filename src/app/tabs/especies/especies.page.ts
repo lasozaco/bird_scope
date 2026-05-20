@@ -80,31 +80,24 @@ export class EspeciesPage implements OnInit {
   readonly familyFilter = signal<string>('all');
   readonly sortBy = signal<'name' | 'scientific'>('name');
 
-  // Señal para chips aleatorios
   readonly randomChips = signal<Species[]>([]);
 
-  // Aves detectadas en Firestore
-  detectedSpecies = new Set<string>();
+  // ✅ Señal para que el HTML pueda usar detectedSpecies()
+  detectedSpecies = signal(new Set<string>());
 
-  // Imágenes detectadas por especie
   detectedImages = signal(new Map<string, string[]>());
-
-  // Imágenes del modal actual
   selectedImages = signal<string[]>([]);
 
-  // Modal
   selectedSpecies = signal<Species | null>(null);
   speciesDetected = signal<boolean>(false);
 
   readonly allSpecies: readonly Species[] = [
-    // ── A ──
     {
       commonName: 'Aguililla Caminera',
       scientificName: 'Rupornis magnirostris',
       family: 'Accipitridae',
       status: 'LC',
-      description:
-        'Rapaz pequeña y valiente, muy común en potreros y bordes de carretera.',
+      description: 'Rapaz pequeña y valiente, muy común en potreros y bordes de carretera.',
       habitat: 'Potreros, bordes de carretera y bosque seco',
     },
     {
@@ -112,8 +105,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Chloroceryle amazona',
       family: 'Alcedinidae',
       status: 'LC',
-      description:
-        'Martín pescador grande de plumaje verde y blanco con pecho rojizo en el macho.',
+      description: 'Martín pescador grande de plumaje verde y blanco con pecho rojizo en el macho.',
       habitat: 'Ríos y quebradas de tierras bajas',
     },
     {
@@ -121,8 +113,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Eupsittula pertinax',
       family: 'Psittacidae',
       status: 'LC',
-      description:
-        'Periquito naranja-pardo muy ruidoso, frecuente en zonas áridas y bosque seco.',
+      description: 'Periquito naranja-pardo muy ruidoso, frecuente en zonas áridas y bosque seco.',
       habitat: 'Bosque seco, zonas áridas y rastrojos',
     },
     {
@@ -130,8 +121,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Coereba flaveola',
       family: 'Thraupidae',
       status: 'LC',
-      description:
-        'Pequeño pájaro negro y amarillo que se alimenta del néctar de las flores.',
+      description: 'Pequeño pájaro negro y amarillo que se alimenta del néctar de las flores.',
       habitat: 'Jardines, bordes de bosque y cafetales',
     },
     {
@@ -139,8 +129,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Thamnophilus doliatus',
       family: 'Thamnophilidae',
       status: 'LC',
-      description:
-        'Hormiguero con barras blancas y negras, macho muy llamativo, hembra rufa.',
+      description: 'Hormiguero con barras blancas y negras, macho muy llamativo, hembra rufa.',
       habitat: 'Rastrojos densos y bordes de bosque',
     },
     {
@@ -148,8 +137,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Pitangus sulphuratus',
       family: 'Tyrannidae',
       status: 'LC',
-      description:
-        'Tiránido grande y ruidoso con pecho amarillo brillante, muy territorial.',
+      description: 'Tiránido grande y ruidoso con pecho amarillo brillante, muy territorial.',
       habitat: 'Zonas abiertas, ríos y jardines',
     },
     {
@@ -157,8 +145,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Bucco capensis',
       family: 'Bucconidae',
       status: 'LC',
-      description:
-        'Buco grande de pecho moteado, quieto y difícil de ver en el interior del bosque.',
+      description: 'Buco grande de pecho moteado, quieto y difícil de ver en el interior del bosque.',
       habitat: 'Interior de bosques húmedos tropicales',
     },
     {
@@ -166,8 +153,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Daptrius chimachima',
       family: 'Falconidae',
       status: 'LC',
-      description:
-        'Caracara de cara amarilla, oportunista y carroñero, frecuente en zonas ganaderas.',
+      description: 'Caracara de cara amarilla, oportunista y carroñero, frecuente en zonas ganaderas.',
       habitat: 'Potreros, zonas ganaderas y bordes de río',
     },
     {
@@ -175,8 +161,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Quiscalus lugubris',
       family: 'Icteridae',
       status: 'LC',
-      description:
-        'Tordo negro iridiscente de cola en forma de quilla, muy gregario y ruidoso.',
+      description: 'Tordo negro iridiscente de cola en forma de quilla, muy gregario y ruidoso.',
       habitat: 'Zonas urbanas, playas y zonas costeras',
     },
     {
@@ -184,8 +169,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Melanerpes rubricapillus',
       family: 'Picidae',
       status: 'LC',
-      description:
-        'Carpintero de barras blancas y negras con gorra roja, muy activo en árboles secos.',
+      description: 'Carpintero de barras blancas y negras con gorra roja, muy activo en árboles secos.',
       habitat: 'Bosque seco, zonas urbanas y arboladas',
     },
     {
@@ -193,8 +177,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Colaptes punctigula',
       family: 'Picidae',
       status: 'LC',
-      description:
-        'Carpintero de pecho con puntos negros, frecuenta bordes de bosque húmedo.',
+      description: 'Carpintero de pecho con puntos negros, frecuenta bordes de bosque húmedo.',
       habitat: 'Bordes de bosque húmedo y tierras bajas',
     },
     {
@@ -202,8 +185,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Mimus gilvus',
       family: 'Mimidae',
       status: 'LC',
-      description:
-        'Excelente imitador de cantos de otras aves, muy activo al amanecer.',
+      description: 'Excelente imitador de cantos de otras aves, muy activo al amanecer.',
       habitat: 'Zonas urbanas, jardines y bosque seco',
     },
     {
@@ -211,8 +193,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Ortalis columbiana',
       family: 'Cracidae',
       status: 'LC',
-      description:
-        'Ave endémica de Colombia, muy vocal en grupos al amanecer y al atardecer.',
+      description: 'Ave endémica de Colombia, muy vocal en grupos al amanecer y al atardecer.',
       habitat: 'Bosques húmedos y bordes de bosque andino',
     },
     {
@@ -220,8 +201,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Lepidopyga coeruleogularis',
       family: 'Trochilidae',
       status: 'LC',
-      description:
-        'Colibrí con capucha de color azul metálico brillante, muy ágil en vuelo.',
+      description: 'Colibrí con capucha de color azul metálico brillante, muy ágil en vuelo.',
       habitat: 'Zonas húmedas, jardines y bordes de bosque',
     },
     {
@@ -229,8 +209,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Amazilia tzacatl',
       family: 'Trochilidae',
       status: 'LC',
-      description:
-        'Colibrí de cola color canela oxidado, uno de los más comunes en jardines.',
+      description: 'Colibrí de cola color canela oxidado, uno de los más comunes en jardines.',
       habitat: 'Jardines, cafetales y bordes de bosque húmedo',
     },
     {
@@ -238,8 +217,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Anthocephala berlepschi',
       family: 'Trochilidae',
       status: 'EN',
-      description:
-        '¡Endémico del Tolima! Especie en peligro, una de las más raras de Colombia.',
+      description: '¡Endémico del Tolima! Especie en peligro, una de las más raras de Colombia.',
       habitat: 'Bosques secos del cañón del río Magdalena, Tolima',
     },
     {
@@ -247,8 +225,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Euphonia laniirostris',
       family: 'Fringillidae',
       status: 'LC',
-      description:
-        'Pequeña ave azul y amarilla con pico grueso, se alimenta de frutas y muérdago.',
+      description: 'Pequeña ave azul y amarilla con pico grueso, se alimenta de frutas y muérdago.',
       habitat: 'Bordes de bosque, jardines y arbolados',
     },
     {
@@ -256,8 +233,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Zonotrichia capensis',
       family: 'Passerellidae',
       status: 'LC',
-      description:
-        'Gorrión andino con corona listada, uno de los más familiares en zonas urbanas.',
+      description: 'Gorrión andino con corona listada, uno de los más familiares en zonas urbanas.',
       habitat: 'Potreros, jardines y zonas urbanas andinas',
     },
     {
@@ -265,8 +241,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Ara severus',
       family: 'Psittacidae',
       status: 'LC',
-      description:
-        'Guacamayo de tamaño mediano con plumaje verde y manchas rojas en las alas.',
+      description: 'Guacamayo de tamaño mediano con plumaje verde y manchas rojas en las alas.',
       habitat: 'Bosques húmedos y galerías boscosas',
     },
     {
@@ -274,8 +249,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Falco femoralis',
       family: 'Falconidae',
       status: 'LC',
-      description:
-        'Halcón de pecho barrado, cazador veloz especializado en aves y murciélagos.',
+      description: 'Halcón de pecho barrado, cazador veloz especializado en aves y murciélagos.',
       habitat: 'Sabanas, potreros y zonas abiertas',
     },
     {
@@ -283,8 +257,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Falco peregrinus',
       family: 'Falconidae',
       status: 'LC',
-      description:
-        'El ave más rápida del mundo, alcanza 300 km/h en picada. Visitante migratorio.',
+      description: 'El ave más rápida del mundo, alcanza 300 km/h en picada. Visitante migratorio.',
       habitat: 'Zonas abiertas, ríos y ciudades',
     },
     {
@@ -292,8 +265,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Myrmeciza longipes',
       family: 'Thamnophilidae',
       status: 'LC',
-      description:
-        'Hormiguero de vientre blanco y dorso café, terrestre y muy sigiloso.',
+      description: 'Hormiguero de vientre blanco y dorso café, terrestre y muy sigiloso.',
       habitat: 'Interior de bosques húmedos de tierras bajas',
     },
     {
@@ -301,8 +273,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Phimosus infuscatus',
       family: 'Threskiornithidae',
       status: 'LC',
-      description:
-        'Ibis oscuro con cara desnuda rosada, gregario en humedales y potreros húmedos.',
+      description: 'Ibis oscuro con cara desnuda rosada, gregario en humedales y potreros húmedos.',
       habitat: 'Humedales, potreros inundables y orillas de ríos',
     },
     {
@@ -310,8 +281,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Sicalis flaveola',
       family: 'Thraupidae',
       status: 'LC',
-      description:
-        'Fringílido amarillo intenso muy popular, frecuente en zonas urbanas y potreros.',
+      description: 'Fringílido amarillo intenso muy popular, frecuente en zonas urbanas y potreros.',
       habitat: 'Zonas urbanas, jardines y rastrojos',
     },
     {
@@ -319,8 +289,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Pionus chalcopterus',
       family: 'Psittacidae',
       status: 'LC',
-      description:
-        'Loro andino de plumaje azul-violáceo con alas bronceadas, muy vocal en bandadas.',
+      description: 'Loro andino de plumaje azul-violáceo con alas bronceadas, muy vocal en bandadas.',
       habitat: 'Bosques andinos húmedos y de niebla',
     },
     {
@@ -328,8 +297,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Turdus fuscater',
       family: 'Turdidae',
       status: 'LC',
-      description:
-        'Una de las aves más familiares de los Andes, canta al amanecer con melodías fluidas.',
+      description: 'Una de las aves más familiares de los Andes, canta al amanecer con melodías fluidas.',
       habitat: 'Zonas urbanas, jardines y bosques andinos',
     },
     {
@@ -337,8 +305,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Momotus aequatorialis',
       family: 'Momotidae',
       status: 'LC',
-      description:
-        'Momoto andino con cola en forma de raqueta y colores turquesa y verde.',
+      description: 'Momoto andino con cola en forma de raqueta y colores turquesa y verde.',
       habitat: 'Bosques andinos húmedos y quebradas',
     },
     {
@@ -346,8 +313,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Leptopogon superciliaris',
       family: 'Tyrannidae',
       status: 'LC',
-      description:
-        'Pequeño tiránido de cabeza gris y partes inferiores amarillentas, activo en el sotobosque.',
+      description: 'Pequeño tiránido de cabeza gris y partes inferiores amarillentas, activo en el sotobosque.',
       habitat: 'Interior de bosques húmedos andinos',
     },
     {
@@ -355,8 +321,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Malacoptila mystacalis',
       family: 'Bucconidae',
       status: 'LC',
-      description:
-        'Buco con bigotes blancos prominentes, sedentario y difícil de detectar en bosques.',
+      description: 'Buco con bigotes blancos prominentes, sedentario y difícil de detectar en bosques.',
       habitat: 'Interior de bosques andinos húmedos',
     },
     {
@@ -364,8 +329,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Turdus leucomelas',
       family: 'Turdidae',
       status: 'LC',
-      description:
-        'Mirla de pecho pálido, canta al amanecer, frecuente en bordes de bosque.',
+      description: 'Mirla de pecho pálido, canta al amanecer, frecuente en bordes de bosque.',
       habitat: 'Bordes de bosque, jardines y zonas arboladas',
     },
     {
@@ -373,8 +337,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Synallaxis brachyura',
       family: 'Furnariidae',
       status: 'LC',
-      description:
-        'Furnárido oscuro de cola larga, muy activo en rastrojos densos y matorrales.',
+      description: 'Furnárido oscuro de cola larga, muy activo en rastrojos densos y matorrales.',
       habitat: 'Rastrojos húmedos y bordes de bosque',
     },
     {
@@ -382,8 +345,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Saltator maximus',
       family: 'Thraupidae',
       status: 'LC',
-      description:
-        'Saltador grande de garganta ocre cremosa, canto fuerte y melodioso.',
+      description: 'Saltador grande de garganta ocre cremosa, canto fuerte y melodioso.',
       habitat: 'Bordes de bosque húmedo y jardines arbolados',
     },
     {
@@ -391,8 +353,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Manacus manacus',
       family: 'Pipridae',
       status: 'LC',
-      description:
-        'Saltarín que realiza leks acrobáticos, macho con barba blanca muy característica.',
+      description: 'Saltarín que realiza leks acrobáticos, macho con barba blanca muy característica.',
       habitat: 'Interior de bosques húmedos de tierras bajas',
     },
     {
@@ -400,8 +361,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Sporophila intermedia',
       family: 'Thraupidae',
       status: 'LC',
-      description:
-        'Semillero de pico cónico, macho gris y blanco, habita pastizales y bordes de río.',
+      description: 'Semillero de pico cónico, macho gris y blanco, habita pastizales y bordes de río.',
       habitat: 'Pastizales, bordes de río y rastrojos',
     },
     {
@@ -409,8 +369,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Vanellus chilensis',
       family: 'Charadriidae',
       status: 'LC',
-      description:
-        'Ave zancuda de prados abiertos, reconocible por su llamado estridente y espolones.',
+      description: 'Ave zancuda de prados abiertos, reconocible por su llamado estridente y espolones.',
       habitat: 'Sabanas, potreros y orillas de ríos',
     },
     {
@@ -418,8 +377,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Thraupis episcopus',
       family: 'Thraupidae',
       status: 'LC',
-      description:
-        'Una de las tángaras más abundantes, con plumaje azul-grisáceo muy característico.',
+      description: 'Una de las tángaras más abundantes, con plumaje azul-grisáceo muy característico.',
       habitat: 'Zonas abiertas, jardines y bordes de bosque',
     },
     {
@@ -427,8 +385,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Tangara vitriolina',
       family: 'Thraupidae',
       status: 'LC',
-      description:
-        'Tángara endémica de Colombia con partes turquesa y negras, habita matorrales densos.',
+      description: 'Tángara endémica de Colombia con partes turquesa y negras, habita matorrales densos.',
       habitat: 'Matorrales secos y bordes de bosque andino',
     },
     {
@@ -436,8 +393,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Tyrannus melancholicus',
       family: 'Tyrannidae',
       status: 'LC',
-      description:
-        'Tiránido grisáceo con corona oculta amarilla, posado visible en perchas expuestas.',
+      description: 'Tiránido grisáceo con corona oculta amarilla, posado visible en perchas expuestas.',
       habitat: 'Bordes de bosque, potreros y zonas abiertas',
     },
     {
@@ -445,8 +401,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Columbina talpacoti',
       family: 'Columbidae',
       status: 'LC',
-      description:
-        'Palomita canela rojiza de pequeño tamaño, muy abundante en zonas rurales y urbanas.',
+      description: 'Palomita canela rojiza de pequeño tamaño, muy abundante en zonas rurales y urbanas.',
       habitat: 'Zonas urbanas, potreros y rastrojos',
     },
     {
@@ -454,8 +409,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Zenaida auriculata',
       family: 'Columbidae',
       status: 'LC',
-      description:
-        'Paloma con manchas negras en la cara, abundante en zonas urbanas y campos abiertos.',
+      description: 'Paloma con manchas negras en la cara, abundante en zonas urbanas y campos abiertos.',
       habitat: 'Zonas urbanas, potreros y campos abiertos',
     },
     {
@@ -463,8 +417,7 @@ export class EspeciesPage implements OnInit {
       scientificName: 'Coragyps atratus',
       family: 'Cathartidae',
       status: 'LC',
-      description:
-        'Gallinazo de cabeza negra desnuda, carroñero clave en el equilibrio del ecosistema.',
+      description: 'Gallinazo de cabeza negra desnuda, carroñero clave en el equilibrio del ecosistema.',
       habitat: 'Zonas abiertas, carreteras y basureros',
     },
   ];
@@ -518,14 +471,13 @@ export class EspeciesPage implements OnInit {
 
   shuffleChips() {
     const detected = this.allSpecies.filter((s) =>
-      this.detectedSpecies.has(s.commonName.toLowerCase()),
+      this.detectedSpecies().has(s.commonName.toLowerCase()),
     );
     const rest = this.allSpecies.filter(
-      (s) => !this.detectedSpecies.has(s.commonName.toLowerCase()),
+      (s) => !this.detectedSpecies().has(s.commonName.toLowerCase()),
     );
     const shuffledDetected = [...detected].sort(() => Math.random() - 0.5);
     const shuffledRest = [...rest].sort(() => Math.random() - 0.5);
-    // Primero detectadas, rellena con el resto si hay menos de 5
     const pool = [...shuffledDetected, ...shuffledRest];
     this.randomChips.set(pool.slice(0, 5));
   }
@@ -535,6 +487,7 @@ export class EspeciesPage implements OnInit {
       const col = collection(this.firestore, 'avistamientos');
       const snap = await getDocs(col);
 
+      const nuevasDetectadas = new Set<string>();
       const newMap = new Map<string, string[]>();
 
       snap.docs.forEach((d) => {
@@ -542,10 +495,6 @@ export class EspeciesPage implements OnInit {
         const esp = data['especie'];
         if (!esp) return;
 
-        const espLower = esp.toLowerCase();
-
-        // Busca qué ave del array coincide con este avistamiento
-        // DESPUÉS
         const espNormalizado = esp
           .toLowerCase()
           .replace(/_/g, ' ')
@@ -570,8 +519,8 @@ export class EspeciesPage implements OnInit {
           );
         });
 
-        const key = match ? match.commonName.toLowerCase() : espLower;
-        this.detectedSpecies.add(key);
+        const key = match ? match.commonName.toLowerCase() : espNormalizado;
+        nuevasDetectadas.add(key);
 
         if (data['imagen']) {
           const imgs = newMap.get(key) ?? [];
@@ -582,7 +531,8 @@ export class EspeciesPage implements OnInit {
         }
       });
 
-      // Actualizar señal
+      // ✅ Actualizar señales
+      this.detectedSpecies.set(nuevasDetectadas);
       this.detectedImages.set(newMap);
     } catch (e) {
       console.warn('No se pudo cargar Firestore', e);
@@ -590,19 +540,15 @@ export class EspeciesPage implements OnInit {
 
     this.shuffleChips();
   }
+
   seleccionarChip(nombre: string) {
     this.search.set(nombre);
   }
 
   openSpecies(s: Species) {
     const key = s.commonName.toLowerCase();
-
-    const detected = this.detectedSpecies.has(key);
-
     this.selectedSpecies.set(s);
-    this.speciesDetected.set(detected);
-
-    // Cargar imágenes reales
+    this.speciesDetected.set(this.detectedSpecies().has(key));
     this.selectedImages.set(this.detectedImages().get(key) ?? []);
   }
 
@@ -627,52 +573,13 @@ export class EspeciesPage implements OnInit {
     const v = ev.detail.value;
     this.sortBy.set(v === 'scientific' ? 'scientific' : 'name');
   }
-  // ============================
-// 🔥 Cargar especies detectadas desde Firestore
-// ============================
-async cargarEspeciesDetectadas() {
-  console.log('Leyendo especies detectadas...');
 
-  const ref = collection(this.firestore, 'detecciones');
-  const snapshot = await getDocs(ref);
-
-  const nuevasDetectadas = new Set<string>();
-  const mapaImagenes = new Map<string, string[]>();
-
-  snapshot.forEach(doc => {
-    const data: any = doc.data();
-
-    const nombre = data.commonName?.toLowerCase();
-    const imagen = data.imagen;
-
-    if (!nombre) return;
-
-    nuevasDetectadas.add(nombre);
-
-    if (!mapaImagenes.has(nombre)) {
-      mapaImagenes.set(nombre, []);
-    }
-
-    if (imagen) {
-      mapaImagenes.get(nombre)!.push(imagen);
-    }
-  });
-
-  this.detectedSpecies = nuevasDetectadas;
-  this.detectedImages.set(mapaImagenes);
-
-  console.log('✅ Especies actualizadas');
-}
-  // 🔄 Pull To Refresh
+  // ✅ Pull to refresh — recarga desde avistamientos
   recargar(event: any) {
-    console.log('Actualizando especies...');
-
     runInInjectionContext(this.injector, async () => {
-      await this.cargarEspeciesDetectadas(); // vuelve a leer firestore
-      this.shuffleChips(); // refresca recomendaciones
-
+      await this.loadDetectedSpecies();
       setTimeout(() => {
-        event.target.complete(); // quita animación
+        event.target.complete();
       }, 900);
     });
   }

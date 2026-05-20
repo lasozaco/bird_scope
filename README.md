@@ -646,6 +646,19 @@ Esto mejora significativamente:
 
 ---
 
+## 🔄 Actualizaciones Recientes
+
+### Pull-to-refresh por módulo
+
+| Módulo | Acción | Resultado |
+|---|---|---|
+| 🌿 Especies | Desliza hacia abajo | Sincroniza avistamientos detectados desde Firebase |
+| 🗺️ Mapa | Desliza hacia abajo | Recarga marcadores y avistamientos en tiempo real |
+| 🏠 Inicio | Desliza hacia abajo | Actualiza estadísticas y especies destacadas |
+| 📊 Reportes | Desliza hacia abajo | Refresca historial completo y métricas |
+
+> 💡 Ninguna de estas acciones requiere cerrar la app ni cambiar de pestaña — todo se actualiza directamente en la vista activa..
+
 ---
 
 # 📄 Licencia
