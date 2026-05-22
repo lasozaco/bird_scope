@@ -19,6 +19,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import * as tf from '@tensorflow/tfjs';
 import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 import { addIcons } from 'ionicons';
+import { Geolocation } from '@capacitor/geolocation';
 import {
   cameraOutline,
   cloudUploadOutline,
@@ -407,10 +408,10 @@ export class ClasificarPage implements OnInit {
     }
   }
 
-  // ✅ Toggle panel ninguna
+// ✅ Toggle panel ninguna
   toggleNinguna() {
     this.mostrarNinguna = !this.mostrarNinguna;
-    this.aveSeleccionada = null; // deselecciona opciones
+    this.aveSeleccionada = null;
   }
 
   // ✅ Reportar ave no identificada
@@ -441,32 +442,36 @@ export class ClasificarPage implements OnInit {
     }
   }
 
+  // ✅ Ahora usa Geolocation nativo de Capacitor
   obtenerUbicacion(): Promise<{ lat: number; lng: number } | null> {
-    return new Promise((resolve) => {
-      if (!navigator.geolocation) return resolve(null);
-      navigator.geolocation.getCurrentPosition(
-        (pos) =>
-          resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        () => resolve(null),
-        { timeout: 8000 },
-      );
+    return new Promise(async (resolve) => {
+      try {
+        const pos = await Geolocation.getCurrentPosition({
+          timeout: 10000,
+          enableHighAccuracy: true,
+        });
+        resolve({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+      } catch (e) {
+        console.error('Error GPS:', e);
+        resolve(null);
+      }
     });
   }
 
+  // ✅ Ahora pide permiso nativo de Android
   async pedirPermisoUbicacion() {
-    return new Promise((resolve) => {
-      if (!navigator.geolocation) return resolve(null);
-      navigator.geolocation.getCurrentPosition(
-        () => resolve(true),
-        () => resolve(false),
-        { timeout: 5000 },
-      );
-    });
+    try {
+      const permiso = await Geolocation.requestPermissions();
+      return permiso.location === 'granted';
+    } catch (e) {
+      console.error('Error pidiendo permiso:', e);
+      return false;
+    }
   }
 
-  // ============================
-  // 🔄 Resetear clasificación
-  // ============================
   resetear() {
     this.imagenPreview = null;
     this.resultado = null;

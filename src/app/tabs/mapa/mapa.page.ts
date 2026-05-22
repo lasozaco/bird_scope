@@ -5,8 +5,8 @@ import {
   inject,
   NgZone,
   signal,
-  Injector, // ← agregar
-  runInInjectionContext, // ← agregar
+  Injector,
+  runInInjectionContext,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,8 +18,8 @@ import {
   IonIcon,
   IonToolbar,
   IonSearchbar,
-  IonRefresher, // 🔥 agregar
-  IonRefresherContent, // 🔥 
+  IonRefresher,
+  IonRefresherContent,
 } from '@ionic/angular/standalone';
 import { Firestore, collection, getDocs } from '@angular/fire/firestore';
 import * as L from 'leaflet';
@@ -39,8 +39,8 @@ import * as L from 'leaflet';
     IonIcon,
     IonButton,
     IonSearchbar,
-    IonRefresher, // 🔥
-    IonRefresherContent, // 🔥
+    IonRefresher,
+    IonRefresherContent,
   ],
 })
 export class MapaPage implements OnInit, OnDestroy {
@@ -53,8 +53,7 @@ export class MapaPage implements OnInit, OnDestroy {
   totalObservaciones = 0;
   conUbicacion = 0;
   avistamientos: any[] = [];
-  avistamientosPorEspecie: { especie: string; items: any[]; color: string }[] =
-    [];
+  avistamientosPorEspecie: { especie: string; items: any[]; color: string }[] = [];
 
   // Buscador
   busqueda = '';
@@ -64,23 +63,20 @@ export class MapaPage implements OnInit, OnDestroy {
   resultadoBusqueda: string | null = null;
   noEncontrada = false;
 
+  // ✅ Especie actualmente filtrada (null = todas) — se usa para mantener el filtro activo al reiniciar mapa o cambiar vista
+  especieFiltrada: string | null = null;
+
   private mapa: L.Map | null = null;
   private marcadores = new Map<string, L.Marker[]>();
-  private marcadorResaltado: L.Marker | null = null;
 
   private readonly COLORES = [
-    '#1f6f49',
-    '#0f8b8d',
-    '#9a6a00',
-    '#c0392b',
-    '#8e44ad',
-    '#2980b9',
-    '#e67e22',
-    '#27ae60',
+    '#1f6f49', '#0f8b8d', '#9a6a00', '#c0392b',
+    '#8e44ad', '#2980b9', '#e67e22', '#27ae60',
   ];
 
   async ngOnInit() {
     await this.cargarDatos();
+    // Iniciar mapa con un pequeño delay para asegurar que el DOM esté listo
     setTimeout(() => this.iniciarMapa(), 600);
   }
 
@@ -150,25 +146,26 @@ export class MapaPage implements OnInit, OnDestroy {
     );
   }
 
-  // Genera recomendaciones aleatorias de especies para mostrar como sugerencias
-  // cuando el usuario no ha escrito nada en el buscador. Esto ayuda a que el usuario
-  // descubra especies que ha observado pero no recuerda el nombre, o que explore otras especies.
   generarRecomendaciones() {
     const especies = this.avistamientosPorEspecie.map((g) => g.especie);
     const mezcladas = [...especies].sort(() => Math.random() - 0.5);
     this.recomendaciones = mezcladas.slice(0, 5);
   }
-
+  //cuando se borra el texto → limpia el filtro y vuelve a mostrar todos
+  //los pins, y si se selecciona una sugerencia → filtra el mapa a esa especie y vuela a ella
   onBusquedaInput(evento: any) {
     const valor = evento.detail.value || '';
     this.busqueda = valor;
     this.resultadoBusqueda = null;
     this.noEncontrada = false;
 
+    // ✅ Si borra el texto → limpiar filtro y mostrar todos
     if (valor.trim().length === 0) {
       this.mostrarSugerencias = false;
       this.sugerencias = [];
       this.resultadoBusqueda = null;
+      this.especieFiltrada = null;
+      this.refrescarPins();
       return;
     }
 
@@ -199,72 +196,110 @@ export class MapaPage implements OnInit, OnDestroy {
 
     this.noEncontrada = false;
     this.resultadoBusqueda = especie;
+    this.especieFiltrada = especie; // ✅ activar filtro
 
-    // Ir a vista mapa
     this.viewMode.set('mapa');
 
+    // el filtro filtrarYVolar se encarga de limpiar los pins y mostrar
+    //  solo los de esa especie, pero si el mapa no está listo aún, lo 
+    // iniciamos primero y luego aplicamos el filtro con un pequeño delay 
+    // para asegurar que el mapa esté renderizado antes de manipular los pins
     setTimeout(() => {
       if (!this.mapa) {
         this.iniciarMapa();
-        setTimeout(() => this.volarAEspecie(grupo), 800);
+        setTimeout(() => this.filtrarYVolar(grupo), 800);
       } else {
-        this.volarAEspecie(grupo);
+        this.filtrarYVolar(grupo);
       }
     }, 300);
   }
 
-  volarAEspecie(grupo: { especie: string; items: any[]; color: string }) {
+  // ✅ Muestra SOLO los pins del ave seleccionada y vuela a ella
+  filtrarYVolar(grupo: { especie: string; items: any[]; color: string }) {
     if (!this.mapa) return;
+
+    // Limpiar todos los marcadores del mapa
+    this.mapa.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        this.mapa!.removeLayer(layer);
+      }
+    });
 
     const conGps = grupo.items.filter((a) => a.latitud && a.longitud);
     if (conGps.length === 0) return;
 
-    const primero = conGps[0];
-
-    // Volar al lugar
-    this.mapa.flyTo([primero.latitud, primero.longitud], 15, {
+    // Volar al primer punto
+    this.mapa.flyTo([conGps[0].latitud, conGps[0].longitud], 15, {
       animate: true,
-      duration: 1.5,
+      duration: 1.2,
     });
 
-    // Resaltar los marcadores de esa especie
-    setTimeout(() => {
-      this.iniciarMapa();
-
-      conGps.forEach((a) => {
-        const icono = L.divIcon({
-          className: '',
-          html: `
-            <div style="
-              width: 40px; height: 40px;
-              background: ${grupo.color};
-              border: 4px solid white;
-              border-radius: 50%;
-              box-shadow: 0 0 0 4px ${grupo.color}88, 0 4px 15px rgba(0,0,0,0.5);
-              animation: pulse 1s infinite;
-            "></div>
-          `,
-          iconSize: [40, 40],
-          iconAnchor: [20, 20],
-          popupAnchor: [0, -20],
-        });
-
-        const marker = L.marker([a.latitud, a.longitud], { icon: icono })
-          .addTo(this.mapa!)
-          .bindPopup(
-            `
-            <div style="text-align:center;min-width:160px;">
-              ${a.imagen ? `<img src="${a.imagen}" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-bottom:6px;"/>` : ''}
-              <strong>🐦 ${a.especie}</strong><br/>
-              <span style="color:${grupo.color};font-weight:bold;">${a.confianza || a.confianzaModelo || 0}% confianza</span><br/>
-              <small>${new Date(a.fecha).toLocaleDateString('es-CO')}</small>
-            </div>
-          `,
-            { maxWidth: 200 },
-          )
-          .openPopup();
+    // Agregar solo los pins de esa especie con animación
+    conGps.forEach((a) => {
+      const icono = L.divIcon({
+        className: '',
+        html: `
+          <div style="
+            width: 40px; height: 40px;
+            background: ${grupo.color};
+            border: 4px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 6px ${grupo.color}55, 0 4px 15px rgba(0,0,0,0.4);
+          "></div>
+        `,
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+        popupAnchor: [0, -20],
       });
-    }, 1500);
+
+      const confianza = a['confianza'] || a['confianzaModelo'] || 0;
+      const fecha = new Date(a['fecha']).toLocaleDateString('es-CO');
+      const imgHtml = a['imagen']
+        ? `<img src="${a['imagen']}" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-bottom:6px;"/>`
+        : '';
+
+      L.marker([a.latitud, a.longitud], { icon: icono })
+        .addTo(this.mapa!)
+        .bindPopup(
+          `<div style="text-align:center;min-width:160px;">
+            ${imgHtml}
+            <strong>🐦 ${a['especie']}</strong><br/>
+            <span style="color:${grupo.color};font-weight:bold;">${confianza}% confianza</span><br/>
+            <small style="color:#666;">${fecha}</small>
+          </div>`,
+          { maxWidth: 200 },
+        )
+        .openPopup();
+    });
+
+    // Si hay varios puntos, ajustar bounds para verlos todos
+    if (conGps.length > 1) {
+      const bounds = L.latLngBounds(conGps.map((a) => [a.latitud, a.longitud]));
+      setTimeout(() => this.mapa!.fitBounds(bounds, { padding: [40, 40] }), 1300);
+    }
+  }
+
+  // ✅ Refresca los pins según si hay filtro activo o no
+  refrescarPins() {
+    if (!this.mapa) return;
+
+    // Limpiar marcadores
+    this.mapa.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        this.mapa!.removeLayer(layer);
+      }
+    });
+
+    if (this.especieFiltrada) {
+      // Mostrar solo el ave filtrada
+      const grupo = this.avistamientosPorEspecie.find(
+        (g) => g.especie === this.especieFiltrada,
+      );
+      if (grupo) this.filtrarYVolar(grupo);
+    } else {
+      // Mostrar todos
+      this.agregarPins();
+    }
   }
 
   iniciarMapa() {
@@ -289,7 +324,15 @@ export class MapaPage implements OnInit, OnDestroy {
       maxZoom: 19,
     }).addTo(this.mapa);
 
-    this.agregarPins();
+    // ✅ Si hay filtro activo al reiniciar mapa, respetarlo
+    if (this.especieFiltrada) {
+      const grupo = this.avistamientosPorEspecie.find(
+        (g) => g.especie === this.especieFiltrada,
+      );
+      if (grupo) setTimeout(() => this.filtrarYVolar(grupo!), 300);
+    } else {
+      this.agregarPins();
+    }
   }
 
   agregarPins() {
@@ -305,17 +348,14 @@ export class MapaPage implements OnInit, OnDestroy {
           const icono = L.divIcon({
             className: '',
             html: `
-              <div style="
-                width: 28px; height: 36px;
-                position: relative;
-              ">
+              <div style="width:28px;height:36px;position:relative;">
                 <div style="
-                  width: 28px; height: 28px;
-                  background: ${grupo.color};
-                  border: 3px solid white;
-                  border-radius: 50% 50% 50% 0;
-                  transform: rotate(-45deg);
-                  box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+                  width:28px;height:28px;
+                  background:${grupo.color};
+                  border:3px solid white;
+                  border-radius:50% 50% 50% 0;
+                  transform:rotate(-45deg);
+                  box-shadow:0 3px 10px rgba(0,0,0,0.4);
                 "></div>
               </div>
             `,
@@ -323,26 +363,22 @@ export class MapaPage implements OnInit, OnDestroy {
             iconAnchor: [14, 36],
             popupAnchor: [0, -36],
           });
-          // Información del popup (agregar imagen, confianza, fecha)
+
           const confianza = a['confianza'] || a['confianzaModelo'] || 0;
           const fecha = new Date(a['fecha']).toLocaleDateString('es-CO');
           const imgHtml = a['imagen']
             ? `<img src="${a['imagen']}" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-bottom:6px;"/>`
             : '';
 
-          const marker = L.marker([a['latitud'], a['longitud']], {
-            icon: icono,
-          })
+          const marker = L.marker([a['latitud'], a['longitud']], { icon: icono })
             .addTo(this.mapa!)
             .bindPopup(
-              `
-              <div style="min-width:160px;text-align:center;">
+              `<div style="min-width:160px;text-align:center;">
                 ${imgHtml}
                 <strong>🐦 ${a['especie']}</strong><br/>
                 <span style="color:${grupo.color};font-weight:bold;">${confianza}% confianza</span><br/>
                 <small style="color:#666;">${fecha}</small>
-              </div>
-            `,
+              </div>`,
               { maxWidth: 200 },
             );
 
@@ -362,31 +398,23 @@ export class MapaPage implements OnInit, OnDestroy {
       setTimeout(() => this.iniciarMapa(), 400);
     }
   }
-  // ✅ REFRESCAR PÁGINA COMPLETA
-  async resetearPagina(event?: any) {
-    console.log('🔄 Actualizando mapa...');
 
-    // limpiar búsqueda
+  // ✅ Resetear todo — limpia filtro y vuelve al mapa completo
+  async resetearPagina(event?: any) {
     this.busqueda = '';
     this.sugerencias = [];
     this.mostrarSugerencias = false;
     this.resultadoBusqueda = null;
     this.noEncontrada = false;
+    this.especieFiltrada = null; // ✅ limpiar filtro
 
-    // destruir mapa actual
     this.destruirMapa();
-
-    // volver a cargar datos
     await this.cargarDatos();
 
-    // reiniciar mapa
     setTimeout(() => {
       this.iniciarMapa();
     }, 400);
 
-    // finalizar animación refresher
-    if (event) {
-      event.target.complete();
-    }
+    if (event) event.target.complete();
   }
 }

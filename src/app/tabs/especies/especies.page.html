@@ -18,8 +18,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="page-content">
-
-  <!-- ✅ Pull to refresh -->
   <ion-refresher slot="fixed" (ionRefresh)="recargar($event)">
     <ion-refresher-content
       pullingText="Desliza para actualizar"
@@ -33,7 +31,7 @@
       class="species-search"
       [value]="search()"
       (ionInput)="onSearchInput($event)"
-      placeholder="Buscar por nombre, hábitat o característica..."
+      placeholder="Buscar especie..."
       [showClearButton]="'focus'"
       [debounce]="0"
     ></ion-searchbar>
@@ -47,7 +45,7 @@
       >
         <ion-select-option value="all">Todas las familias</ion-select-option>
         @for (f of families(); track f) {
-          <ion-select-option [value]="f">{{ f }}</ion-select-option>
+        <ion-select-option [value]="f">{{ f }}</ion-select-option>
         }
       </ion-select>
 
@@ -58,124 +56,158 @@
         interface="popover"
       >
         <ion-select-option value="name">Nombre</ion-select-option>
-        <ion-select-option value="scientific">Nombre científico</ion-select-option>
+        <ion-select-option value="scientific"
+          >Nombre científico</ion-select-option
+        >
       </ion-select>
     </div>
 
     <p class="results-count">{{ resultCount() }} especies encontradas</p>
 
-    <!-- Chips aleatorios -->
     @if (search().trim().length === 0) {
-      <div class="recomendaciones">
-        <p class="recomendaciones__titulo">🌟 Descubre una especie:</p>
-        <div class="recomendaciones__chips">
-          @for (s of randomChips(); track s.commonName) {
-            <span class="chip" (click)="seleccionarChip(s.commonName)">
-              {{ s.commonName }}
-            </span>
-          }
-          <span class="chip chip--refresh" (click)="shuffleChips()" title="Otras especies">
-            🔀
-          </span>
-        </div>
+    <div class="recomendaciones">
+      <p class="recomendaciones__titulo">🌟 Descubre una especie:</p>
+      <div class="recomendaciones__chips">
+        @for (s of randomChips(); track s.commonName) {
+        <span class="chip" (click)="seleccionarChip(s.commonName)">
+          {{ s.commonName }}
+        </span>
+        }
+        <span class="chip chip--refresh" (click)="shuffleChips()">🔀</span>
       </div>
+    </div>
     }
 
-    <!-- Lista de especies -->
     <ul class="species-list" role="list">
       @for (s of filteredSpecies(); track s.commonName + s.scientificName) {
-        <li>
-          <button type="button" class="species-card" (click)="openSpecies(s)">
-            <div class="species-card__icon" aria-hidden="true">
-              <ion-icon name="leaf-outline"></ion-icon>
+      <li>
+        <button type="button" class="species-card" (click)="openSpecies(s)">
+          <!-- Icono ave -->
+          <div
+            class="species-card__avatar"
+            [class.species-card__avatar--detected]="detectedSpecies().has(s.commonName.toLowerCase())"
+          >
+            <span class="bird-emoji">🐦</span>
+            @if (detectedSpecies().has(s.commonName.toLowerCase())) {
+            <span class="detected-dot"></span>
+            }
+          </div>
+
+          <div class="species-card__body">
+            <div class="species-card__name">{{ s.commonName }}</div>
+            <div class="species-card__latin">
+              <em>{{ s.scientificName }}</em>
             </div>
-            <div class="species-card__body">
-              <div class="species-card__name">{{ s.commonName }}</div>
-              <div class="species-card__latin">
-                <em>{{ s.scientificName }}</em>
-              </div>
-              <div class="species-card__meta">
-                <span class="species-card__family">{{ s.family }}</span>
-                <span class="species-card__badge">{{ s.status }}</span>
-                <!-- ✅ detectedSpecies() con paréntesis porque ahora es señal -->
-                @if (detectedSpecies().has(s.commonName.toLowerCase())) {
-                  <span class="species-card__detected">📍 Detectada</span>
-                }
-              </div>
+            <div class="species-card__meta">
+              <span class="species-card__family">{{ s.family }}</span>
+              <span
+                class="species-card__badge"
+                [class.species-card__badge--en]="s.status === 'EN'"
+              >
+                {{ s.status }}
+              </span>
+              @if (detectedSpecies().has(s.commonName.toLowerCase())) {
+              <span class="species-card__detected">📍 Detectada</span>
+              }
             </div>
-            <ion-icon
-              class="species-card__chevron"
-              name="chevron-forward-outline"
-              aria-hidden="true"
-            ></ion-icon>
-          </button>
-        </li>
+          </div>
+
+          <ion-icon
+            class="species-card__chevron"
+            name="chevron-forward-outline"
+          ></ion-icon>
+        </button>
+      </li>
       }
     </ul>
   </div>
 </ion-content>
 
-<!-- Modal de detalle -->
+<!-- Modal detalle -->
 @if (selectedSpecies()) {
-  <div class="modal-overlay" (click)="closeModal()">
-    <div class="modal-sheet" (click)="$event.stopPropagation()">
-      <div class="modal-handle"></div>
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="modal-sheet" (click)="$event.stopPropagation()">
+    <div class="modal-handle"></div>
 
-      <div class="modal-header">
-        <div class="modal-icon">
-          <ion-icon name="leaf-outline"></ion-icon>
+    <!-- Header modal -->
+    <div class="modal-header">
+      <div
+        class="modal-avatar"
+        [class.modal-avatar--detected]="speciesDetected()"
+      >
+        <span class="modal-bird-emoji">🐦</span>
+      </div>
+      <button class="modal-close" (click)="closeModal()">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-status-row">
+        <span
+          class="modal-badge"
+          [class.modal-badge--en]="selectedSpecies()!.status === 'EN'"
+        >
+          {{ selectedSpecies()!.status }}
+        </span>
+        <span class="modal-family">{{ selectedSpecies()!.family }}</span>
+      </div>
+
+      <h2 class="modal-name">{{ selectedSpecies()!.commonName }}</h2>
+      <p class="modal-latin">
+        <em>{{ selectedSpecies()!.scientificName }}</em>
+      </p>
+
+      <!-- Fotos registradas -->
+      @if (selectedImages().length > 0) {
+      <div class="modal-photos-wrap">
+        <p class="modal-photos-label">📸 Tus registros</p>
+        <div class="modal-photos">
+          @for (img of selectedImages(); track $index) {
+          <img
+            class="modal-photo"
+            [src]="img"
+            alt="Foto registrada"
+            (click)="abrirFoto(img)"
+          />
+          }
         </div>
-        <button class="modal-close" (click)="closeModal()">
-          <ion-icon name="close-outline"></ion-icon>
-        </button>
       </div>
+      }
 
-      <div class="modal-body">
-        <h2 class="modal-name">{{ selectedSpecies()!.commonName }}</h2>
-        <p class="modal-latin">
-          <em>{{ selectedSpecies()!.scientificName }}</em>
-        </p>
-
-        <!-- Fotos reales -->
-        @if (selectedImages().length > 0) {
-          <div class="modal-photos">
-            @for (img of selectedImages(); track $index) {
-              <img class="modal-photo" [src]="img" alt="Foto registrada" />
-            }
-          </div>
-        }
-
-        @if (selectedSpecies()!.description) {
-          <div class="modal-section">
-            <p class="modal-section__label">📖 Descripción</p>
-            <p class="modal-section__text">{{ selectedSpecies()!.description }}</p>
-          </div>
-        }
-
-        @if (selectedSpecies()!.habitat) {
-          <div class="modal-section">
-            <p class="modal-section__label">🌿 Hábitat</p>
-            <p class="modal-section__text">{{ selectedSpecies()!.habitat }}</p>
-          </div>
-        }
-
-        <!-- Estado detección -->
-        @if (speciesDetected()) {
-          <div class="modal-detected modal-detected--yes">
-            <ion-icon name="checkmark-circle-outline"></ion-icon>
-            <span>¡Ya tienes un registro de esta ave!</span>
-          </div>
-        } @else {
-          <div class="modal-detected modal-detected--no">
-            <ion-icon name="camera-outline"></ion-icon>
-            <span>Aún no has registrado esta especie</span>
-          </div>
-          <button class="modal-cta" (click)="goToClasificar()">
-            <ion-icon name="camera-outline"></ion-icon>
-            Clasificar esta ave
-          </button>
-        }
+      <!-- Visor foto ampliada -->
+      @if (fotoAmpliada()) {
+      <div class="foto-overlay" (click)="cerrarFoto()">
+        <img class="foto-ampliada" [src]="fotoAmpliada()" alt="Foto ampliada" />
+        <button class="foto-close" (click)="cerrarFoto()">✕</button>
       </div>
+      <!-- Detalles especie -->
+      } @if (selectedSpecies()!.description) {
+      <div class="modal-section">
+        <p class="modal-section__label">📖 Descripción</p>
+        <p class="modal-section__text">{{ selectedSpecies()!.description }}</p>
+      </div>
+      } @if (selectedSpecies()!.habitat) {
+      <div class="modal-section">
+        <p class="modal-section__label">🌿 Hábitat</p>
+        <p class="modal-section__text">{{ selectedSpecies()!.habitat }}</p>
+      </div>
+      } @if (speciesDetected()) {
+      <div class="modal-detected modal-detected--yes">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        <span>¡Ya tienes un registro de esta ave!</span>
+      </div>
+      } @else {
+      <div class="modal-detected modal-detected--no">
+        <ion-icon name="camera-outline"></ion-icon>
+        <span>Aún no has registrado esta especie</span>
+      </div>
+      <button class="modal-cta" (click)="goToClasificar()">
+        <ion-icon name="camera-outline"></ion-icon>
+        Clasificar esta ave
+      </button>
+      }
     </div>
   </div>
+</div>
 }

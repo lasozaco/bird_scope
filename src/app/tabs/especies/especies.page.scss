@@ -1,21 +1,21 @@
 :host {
   --page-bg: #f6f4ef;
-  --green: #1b5e20;
-  --green-soft: rgba(27, 94, 32, 0.12);
-  --badge-green: #00c853;
+  --green: #1f6f49;
+  --green-soft: rgba(31, 111, 73, 0.10);
+  --green-mid: rgba(31, 111, 73, 0.18);
+  --badge-green: #2ecc71;
+  --badge-red: #e74c3c;
   --text: #111827;
   --muted: #6b7280;
   --card-bg: #ffffff;
-  --card-border: rgba(15, 23, 42, 0.1);
+  --card-border: rgba(15, 23, 42, 0.09);
   --serif: ui-serif, Georgia, 'Times New Roman', Times, serif;
   --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
-.page-header {
-  ion-toolbar {
-    --background: #ffffff;
-    --border-color: rgba(15, 23, 42, 0.08);
-  }
+.page-header ion-toolbar {
+  --background: #ffffff;
+  --border-color: rgba(15, 23, 42, 0.08);
 }
 
 .brand {
@@ -24,79 +24,41 @@
   gap: 10px;
   padding-left: 10px;
 }
-
 .brand__logo {
-  width: 40px;
-  height: 40px;
+  width: 40px; height: 40px;
   border-radius: 999px;
   background: transparent;
   display: grid;
   place-items: center;
 }
+.brand__img { width: 28px; height: 28px; object-fit: contain; }
+.brand__wordmark { display: block; height: 22px; width: auto; max-width: 190px; object-fit: contain; }
 
-.brand__img {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  display: block;
-}
-
-.brand__title {
-  font-family: var(--serif);
-  font-weight: 800;
-  font-size: 20px;
-  line-height: 1.05;
-  color: #0f172a;
-}
-
-.brand__wordmark {
-  display: block;
-  height: 22px;
-  width: auto;
-  max-width: 190px;
-  object-fit: contain;
-}
-
-.brand__subtitle {
-  font-family: var(--serif);
-  font-size: 14px;
-  color: #6b7280;
-  line-height: 1.1;
-}
-
-.page-content {
-  --background: var(--page-bg);
-  --overflow: auto;
-}
+.page-content { --background: var(--page-bg); }
 
 .page {
   padding: 12px 16px calc(24px + env(safe-area-inset-bottom) + 72px);
 }
 
+// ── Buscador ──
 .species-search {
   --background: #ffffff;
   --border-radius: 16px;
-  --box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06);
+  --box-shadow: 0 1px 0 rgba(15,23,42,0.06);
   --icon-color: var(--muted);
   --placeholder-color: #9ca3af;
   --color: var(--text);
   padding: 0;
   margin-bottom: 12px;
-  font-family: var(--sans);
 }
 
-.species-search::part(native) {
-  font-family: var(--sans);
-  font-size: 15px;
-}
-
+// ── Filtros ──
 .filters {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-bottom: 10px;
 }
-
 .filter-select {
   --background: #ffffff;
   --padding-start: 12px;
@@ -104,10 +66,9 @@
   --padding-top: 10px;
   --padding-bottom: 10px;
   --border-radius: 14px;
-  --border-color: rgba(15, 23, 42, 0.14);
+  --border-color: rgba(15,23,42,0.14);
   --border-style: solid;
   --border-width: 1px;
-  --placeholder-color: var(--muted);
   font-family: var(--serif);
   font-size: 14px;
   font-weight: 700;
@@ -119,113 +80,11 @@
   margin: 6px 0 14px;
   font-family: var(--serif);
   font-size: 14px;
-  color: rgba(17, 24, 39, 0.65);
+  color: rgba(17,24,39,0.55);
 }
 
-.species-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.species-card {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 14px 14px 12px;
-  border: 1px solid var(--card-border);
-  border-radius: 18px;
-  background: var(--card-bg);
-  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
-  text-align: left;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.species-card__icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
-  background: #e8f5e9;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  color: var(--green);
-}
-
-.species-card__icon ion-icon {
-  font-size: 26px;
-}
-
-.species-card__body {
-  flex: 1;
-  min-width: 0;
-}
-
-.species-card__name {
-  font-family: var(--serif);
-  font-weight: 900;
-  font-size: 18px;
-  color: var(--text);
-  line-height: 1.15;
-}
-
-.species-card__latin {
-  margin-top: 4px;
-  font-family: var(--serif);
-  font-size: 15px;
-  color: var(--muted);
-  font-style: italic;
-}
-
-.species-card__latin em {
-  font-style: italic;
-}
-
-.species-card__meta {
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.species-card__family {
-  font-family: var(--serif);
-  font-size: 14px;
-  color: rgba(17, 24, 39, 0.55);
-}
-
-.species-card__badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 34px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: var(--badge-green);
-  color: #ffffff;
-  font-family: var(--serif);
-  font-weight: 800;
-  font-size: 12px;
-  letter-spacing: 0.02em;
-}
-
-.species-card__chevron {
-  flex-shrink: 0;
-  font-size: 20px;
-  color: rgba(17, 24, 39, 0.35);
-}
-
-/* ── Chips de recomendación ── */
-.recomendaciones {
-  margin-bottom: 16px;
-}
-
+// ── Chips ──
+.recomendaciones { margin-bottom: 16px; }
 .recomendaciones__titulo {
   font-family: var(--serif);
   font-size: 13px;
@@ -233,13 +92,7 @@
   margin: 0 0 8px;
   font-weight: 600;
 }
-
-.recomendaciones__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
+.recomendaciones__chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip {
   display: inline-flex;
   align-items: center;
@@ -251,41 +104,148 @@
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
-  -webkit-tap-highlight-color: transparent;
-
   &:active { transform: scale(0.95); }
 }
-
-// Esta clase es para el chip de "Otras especies" que aparece junto a las recomendaciones,
-// y al hacer click en ella se generan nuevas recomendaciones aleatorias. Es una forma de 
-//incentivar al usuario a explorar otras especies que ha observado pero no recuerda,
-// o simplemente descubrir nuevas especies.
 .chip--refresh {
-  background: var(--ion-color-primary, #1f6f49);
+  background: var(--green);
   color: white;
   font-size: 1rem;
-  padding: 4px 10px;
-  border-radius: 20px;
-  cursor: pointer;
+  padding: 4px 12px;
 }
 
-/* ── Badge "Detectada" en la tarjeta ── */
+// ── Lista ──
+.species-list {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// ── Card ──
+.species-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 12px;
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  background: var(--card-bg);
+  box-shadow: 0 4px 16px rgba(2,6,23,0.06);
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.12s, box-shadow 0.12s;
+  &:active { transform: scale(0.98); box-shadow: 0 2px 8px rgba(2,6,23,0.08); }
+}
+
+// Avatar pájarito
+.species-card__avatar {
+  position: relative;
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: #e8f5ee;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  font-size: 28px;
+  transition: background 0.2s;
+
+  &--detected {
+    background: linear-gradient(135deg, #d4edda, #a8d5b5);
+    box-shadow: 0 0 0 2px var(--green);
+  }
+}
+
+.bird-emoji {
+  font-size: 28px;
+  line-height: 1;
+}
+
+// Punto verde de "detectada"
+.detected-dot {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--green);
+  border: 2px solid white;
+}
+
+.species-card__body { flex: 1; min-width: 0; }
+
+.species-card__name {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.species-card__latin {
+  margin-top: 3px;
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.species-card__meta {
+  margin-top: 7px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.species-card__family {
+  font-family: var(--serif);
+  font-size: 12px;
+  color: rgba(17,24,39,0.45);
+}
+
+.species-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--badge-green);
+  color: #fff;
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 11px;
+
+  &--en {
+    background: var(--badge-red);
+  }
+}
+
 .species-card__detected {
-  font-family: var(--sans);
   font-size: 11px;
   font-weight: 700;
-  color: #1b5e20;
-  background: #c8e6c9;
-  padding: 3px 8px;
+  color: var(--green);
+  background: var(--green-soft);
+  padding: 2px 8px;
   border-radius: 999px;
 }
 
-/* ── Modal ── */
+.species-card__chevron {
+  flex-shrink: 0;
+  font-size: 18px;
+  color: rgba(17,24,39,0.25);
+}
+
+// ── Modal ──
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0,0,0,0.5);
   z-index: 1000;
   display: flex;
   align-items: flex-end;
@@ -294,17 +254,16 @@
 
 .modal-sheet {
   width: 100%;
-  max-height: 82vh;
+  max-height: 85vh;
   background: #ffffff;
   border-radius: 24px 24px 0 0;
-  padding: 0 20px 40px;
+  padding: 0 20px 44px;
   overflow-y: auto;
   animation: slideUp 0.28s cubic-bezier(.22,.68,0,1.2);
 }
 
 .modal-handle {
-  width: 40px;
-  height: 4px;
+  width: 40px; height: 4px;
   background: #e5e7eb;
   border-radius: 999px;
   margin: 12px auto 0;
@@ -317,20 +276,25 @@
   padding: 16px 0 8px;
 }
 
-.modal-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  background: #e8f5e9;
+// Avatar grande en modal
+.modal-avatar {
+  width: 64px; height: 64px;
+  border-radius: 18px;
+  background: #e8f5ee;
   display: grid;
   place-items: center;
-  color: var(--green);
-  font-size: 26px;
+  font-size: 36px;
+
+  &--detected {
+    background: linear-gradient(135deg, #d4edda, #a8d5b5);
+    box-shadow: 0 0 0 3px var(--green);
+  }
 }
 
+.modal-bird-emoji { font-size: 36px; line-height: 1; }
+
 .modal-close {
-  width: 36px;
-  height: 36px;
+  width: 36px; height: 36px;
   border-radius: 999px;
   background: #f3f4f6;
   border: none;
@@ -339,6 +303,34 @@
   font-size: 22px;
   color: var(--muted);
   cursor: pointer;
+}
+
+.modal-body { padding-top: 4px; }
+
+.modal-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.modal-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--badge-green);
+  color: #fff;
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 12px;
+
+  &--en { background: var(--badge-red); }
+}
+
+.modal-family {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--muted);
+  font-style: italic;
 }
 
 .modal-name {
@@ -351,41 +343,35 @@
 
 .modal-latin {
   font-family: var(--serif);
-  font-size: 16px;
+  font-size: 15px;
   color: var(--muted);
-  font-style: italic;
-  margin: 0 0 12px;
+  margin: 0 0 16px;
 }
 
-.modal-tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
-.modal-tag {
-  padding: 4px 12px;
-  border-radius: 999px;
+// Fotos
+.modal-photos-wrap { margin-bottom: 16px; }
+.modal-photos-label {
   font-family: var(--serif);
   font-size: 13px;
   font-weight: 700;
-}
-
-.modal-tag--family {
-  background: #f3f4f6;
   color: var(--muted);
+  margin: 0 0 8px;
+}
+.modal-photos {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.modal-photo {
+  width: 90px; height: 90px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+  border: 2px solid #e8f5e9;
 }
 
-.modal-tag--status {
-  background: var(--badge-green);
-  color: #fff;
-}
-
-.modal-section {
-  margin-bottom: 16px;
-}
-
+.modal-section { margin-bottom: 16px; }
 .modal-section__label {
   font-family: var(--serif);
   font-size: 13px;
@@ -393,12 +379,11 @@
   color: var(--muted);
   margin: 0 0 4px;
 }
-
 .modal-section__text {
   font-family: var(--sans);
   font-size: 15px;
   color: var(--text);
-  line-height: 1.55;
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -412,18 +397,10 @@
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 12px;
-
   ion-icon { font-size: 20px; }
 
-  &--yes {
-    background: #e8f5e9;
-    color: #1b5e20;
-  }
-
-  &--no {
-    background: #fff8e1;
-    color: #e65100;
-  }
+  &--yes { background: #e8f5e9; color: #1b5e20; }
+  &--no  { background: #fff8e1; color: #e65100; }
 }
 
 .modal-cta {
@@ -454,19 +431,37 @@
   to   { transform: translateY(0); }
 }
 
-// Estilos para las imágenes detectadas en el modal
-.modal-photos {
+.foto-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 2000;
   display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-  overflow-x: auto;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
 }
 
-.modal-photo {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 12px;
-  flex-shrink: 0;
-  border: 2px solid #e8f5e9;
+.foto-ampliada {
+  max-width: 92vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+}
+
+.foto-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
 }

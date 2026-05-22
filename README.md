@@ -458,24 +458,6 @@ Ibagué, Tolima — Colombia 🇨🇴
 
 ---
 
-# 📌 Estado del Proyecto
-
-<div align="center">
-
-| Módulo | Estado |
-|---|---|
-| Aplicación móvil | ✅ |
-| Firebase integrado | ✅ |
-| IA TensorFlow.js | ✅ |
-| Mapas interactivos | ✅ |
-| Clasificación tiempo real | ✅ |
-| Responsive UI | ✅ |
-| Compatibilidad Android | ✅ |
-
-</div>
-
----
-
 # 📱 Ejecución en Android (APK)
 
 BirdScope fue optimizado para ejecutarse directamente en dispositivos Android utilizando Capacitor y Android Studio, permitiendo probar la aplicación de forma nativa desde un celular físico conectado por USB.
@@ -658,6 +640,21 @@ Esto mejora significativamente:
 | 📊 Reportes | Desliza hacia abajo | Refresca historial completo y métricas |
 
 > 💡 Ninguna de estas acciones requiere cerrar la app ni cambiar de pestaña — todo se actualiza directamente en la vista activa..
+---
+### 🆕 Actualización 2 — Mejoras de Experiencia y Funcionalidad
+
+| Módulo | Mejora | Descripción |
+|---|---|---|
+| 🧠 Clasificar | Confirmación inteligente | Si la confianza es ≥70% se guarda automáticamente; entre 45–69% el usuario elige entre las 3 opciones; <45% aparece además el botón "Ninguna es correcta" |
+| 🧠 Clasificar | GPS nativo Android | Migración de `navigator.geolocation` a `@capacitor/geolocation` para garantizar ubicación real en APK |
+| 🧠 Clasificar | Compresión de imágenes | Imágenes comprimidas automáticamente antes de guardar en Firestore para evitar el límite de 1MB por documento |
+| 🧠 Clasificar | Reporte de no identificadas | El usuario puede reportar cuando ninguna predicción es correcta, opcionalmente escribiendo el nombre real del ave |
+| 🗺️ Mapa | Filtro por especie | Al buscar o seleccionar un ave, el mapa muestra únicamente los pins de esa especie; al limpiar la búsqueda vuelve a mostrar todas |
+| 🌿 Especies | Rediseño visual | Icono de pájarito 🐦 en lugar de hojita, cards mejoradas, badge rojo para especies EN peligro y punto verde en aves detectadas |
+| 🌿 Especies | Visor de fotos | Al tocar una foto registrada en el modal de especie, se amplía a pantalla completa con fondo oscuro |
+| ⚙️ General | Iconos Ionicons | Registro manual de iconos con `addIcons()` para compatibilidad total en Android standalone |
+
+> 💡 La lógica de confirmación humana permite mejorar progresivamente el dataset del modelo IA con datos reales etiquetados por usuarios en campo.
 ---
 # 📥 Descarga APK
 

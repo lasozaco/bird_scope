@@ -79,17 +79,16 @@ export class EspeciesPage implements OnInit {
   readonly search = signal('');
   readonly familyFilter = signal<string>('all');
   readonly sortBy = signal<'name' | 'scientific'>('name');
-
   readonly randomChips = signal<Species[]>([]);
 
-  // ✅ Señal para que el HTML pueda usar detectedSpecies()
   detectedSpecies = signal(new Set<string>());
-
   detectedImages = signal(new Map<string, string[]>());
   selectedImages = signal<string[]>([]);
-
   selectedSpecies = signal<Species | null>(null);
   speciesDetected = signal<boolean>(false);
+
+  // ✅ Nueva señal para foto ampliada
+  fotoAmpliada = signal<string | null>(null);
 
   readonly allSpecies: readonly Species[] = [
     {
@@ -531,7 +530,6 @@ export class EspeciesPage implements OnInit {
         }
       });
 
-      // ✅ Actualizar señales
       this.detectedSpecies.set(nuevasDetectadas);
       this.detectedImages.set(newMap);
     } catch (e) {
@@ -554,6 +552,17 @@ export class EspeciesPage implements OnInit {
 
   closeModal() {
     this.selectedSpecies.set(null);
+    this.fotoAmpliada.set(null); // ✅ cerrar foto si estaba abierta
+  }
+
+  // ✅ Abrir foto ampliada
+  abrirFoto(img: string) {
+    this.fotoAmpliada.set(img);
+  }
+
+  // ✅ Cerrar foto ampliada
+  cerrarFoto() {
+    this.fotoAmpliada.set(null);
   }
 
   goToClasificar() {
@@ -574,7 +583,6 @@ export class EspeciesPage implements OnInit {
     this.sortBy.set(v === 'scientific' ? 'scientific' : 'name');
   }
 
-  // ✅ Pull to refresh — recarga desde avistamientos
   recargar(event: any) {
     runInInjectionContext(this.injector, async () => {
       await this.loadDetectedSpecies();
